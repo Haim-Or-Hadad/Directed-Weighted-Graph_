@@ -2,9 +2,13 @@ package api;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.HashMap;
 
-public class Graph implements DirectedWeightedGraph , DirectedWeightedGraphAlgorithms{
-    Node N;
+public class Graph implements DirectedWeightedGraph {
+    private HashMap<Integer, NodeData> nodes;
+    private HashMap<Integer, HashMap<Integer, EdgeData>> edges;
+    private int numOfNodes;
+    private int numOfEdges;
 
     @Override
     public NodeData getNode(int key) {
@@ -64,55 +68,5 @@ public class Graph implements DirectedWeightedGraph , DirectedWeightedGraphAlgor
     @Override
     public int getMC() {
         return 0;
-    }
-
-    @Override
-    public void init(DirectedWeightedGraph g) {
-
-    }
-
-    @Override
-    public DirectedWeightedGraph getGraph() {
-        return null;
-    }
-
-    @Override
-    public DirectedWeightedGraph copy() {
-        return null;
-    }
-
-    @Override
-    public boolean isConnected() {
-        return false;
-    }
-
-    @Override
-    public double shortestPathDist(int src, int dest) {
-        return 0;
-    }
-
-    @Override
-    public List<NodeData> shortestPath(int src, int dest) {
-        return null;
-    }
-
-    @Override
-    public NodeData center() {
-        return null;
-    }
-
-    @Override
-    public List<NodeData> tsp(List<NodeData> cities) {
-        return null;
-    }
-
-    @Override
-    public boolean save(String file) {
-        return false;
-    }
-
-    @Override
-    public boolean load(String file) {
-        return false;
     }
 }

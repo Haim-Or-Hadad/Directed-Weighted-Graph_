@@ -1,38 +1,20 @@
 package api;
 
-public class Node implements NodeData,GeoLocation {
+public class Node implements NodeData {
 
-        private double x;
-        private double y;
-        private double z;
+        GeoLocation coordinates;
         private int id;
+        private double weight=0;
+        private String Info;
+        private int tag;
 
-        public Node(double x , double y , double z ,int id){
+        public Node(int id , GeoLocation coord){
                 this.id=id;
-                this.x=x;
-                this.y=y;
-                this.z=z;
+                this.coordinates=coord;
+                this.Info="White";
+                this.tag=-1;
         }
 
-        @Override
-        public double x() {
-                return this.x;
-        }
-
-        @Override
-        public double y() {
-                return this.y;
-        }
-
-        @Override
-        public double z() {
-                return this.z;
-        }
-
-        @Override
-        public double distance(GeoLocation g) {
-                return Math.sqrt(Math.pow(x-g.x(),2)+Math.pow((y-g.y()),2)+Math.pow((z-g.z()),2));
-        }
 
         @Override
         public int getKey() {
@@ -46,36 +28,37 @@ public class Node implements NodeData,GeoLocation {
 
         @Override
         public void setLocation(GeoLocation p) {
-
+        this.coordinates=new geo_location(p.x(),p.y(),p.z()) {
+        };
         }
 
         @Override
         public double getWeight() {
-                return 0;
+                return weight;
         }
 
         @Override
         public void setWeight(double w) {
-
+        this.weight=w;
         }
 
         @Override
         public String getInfo() {
-                return null;
+                return Info;
         }
 
         @Override
         public void setInfo(String s) {
-
+        this.Info=s;
         }
 
         @Override
         public int getTag() {
-                return 0;
+                return tag;
         }
 
         @Override
         public void setTag(int t) {
-
+        this.tag=t;
         }
 }

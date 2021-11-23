@@ -1,0 +1,41 @@
+package api;
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
+
+public class JsonToGraph implements JsonDeserializer<DirectedWeightedGraph> {
+
+    @Override
+    public DirectedWeightedGraph deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        DirectedWeightedGraph graph = new Graph();
+        JsonArray nodesJsonArray = jsonObject.get("Nodes").getAsJsonArray();
+        for (int i = 0; i < nodesJsonArray.size(); i++) {
+            JsonObject jsonObjectNode = nodesJsonArray.get(i).getAsJsonObject();
+            int key = jsonObjectNode.get("id").getAsInt();
+            double weight = 0;
+            if(jsonObjectNode.keySet().contains("weight")){
+                weight = jsonObjectNode.get("weight").getAsDouble();
+            }
+            JsonElement location = jsonObjectNode.get("pos");
+            String s = location.getAsString();
+            String arr[] = s.split(",");
+            double x = Double.parseDouble(arr[0]);
+            double y = Double.parseDouble(arr[1]);
+            double z = Double.parseDouble(arr[2]);
+            geo_location pos = new geo_location(x, y, z);
+            NodeData n = new Node(key, pos, weight, "White", -1);
+            graph.addNode(n);
+        }
+
+        JsonArray edgesJsonArray = jsonObject.get("Edges").getAsJsonArray();
+        for (int i = 0; i < edgesJsonArray.size(); i++) {
+            JsonObject jsonObjectEdge = edgesJsonArray.get(i).getAsJsonObject();
+            int src = jsonObjectEdge.get("src").getAsInt();
+            int dest = jsonObjectEdge.get("dest").getAsInt();
+            double w = jsonObjectEdge.get("w").getAsDouble();
+            graph.connect(src,dest,w);
+        }
+        return graph;
+    }
+}
