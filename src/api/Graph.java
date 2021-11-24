@@ -10,6 +10,13 @@ public class Graph implements DirectedWeightedGraph {
     private int numOfNodes;
     private int numOfEdges;
 
+    public Graph(){
+        this.nodes=new HashMap<>();
+        this.edges=new HashMap<>();
+        this.numOfNodes=0;
+        this.numOfEdges=0;
+    }
+
     @Override
     public NodeData getNode(int key) {
         return null;

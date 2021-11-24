@@ -1,5 +1,5 @@
-import api.DirectedWeightedGraph;
-import api.DirectedWeightedGraphAlgorithms;
+
+import api.*;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.

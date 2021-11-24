@@ -6,13 +6,13 @@ public class Node implements NodeData {
         private int id;
         private double weight=0;
         private String Info;
-        private int tag;
+        private int Tag;
 
         public Node(int id , GeoLocation coord){
                 this.id=id;
                 this.coordinates=coord;
                 this.Info="White";
-                this.tag=-1;
+                this.Tag=-1;
         }
 
 
@@ -28,8 +28,7 @@ public class Node implements NodeData {
 
         @Override
         public void setLocation(GeoLocation p) {
-        this.coordinates=new geo_location(p.x(),p.y(),p.z()) {
-        };
+        this.coordinates=new geo_location(p.x(),p.y(),p.z());
         }
 
         @Override
@@ -54,11 +53,11 @@ public class Node implements NodeData {
 
         @Override
         public int getTag() {
-                return tag;
+                return Tag;
         }
 
         @Override
         public void setTag(int t) {
-        this.tag=t;
+        this.Tag=t;
         }
 }

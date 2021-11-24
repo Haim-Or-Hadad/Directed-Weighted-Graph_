@@ -5,11 +5,14 @@ public class Edge implements EdgeData{
     private int dest;
     private double weight;
     private int Tag;
+    private String Info;
 
     public Edge(int src ,int dest,double weight){
         this.src=src;
         this.dest=dest;
         this.weight=weight;
+        this.Info="White";
+        this.Tag=-1;
     }
 
     @Override
@@ -29,12 +32,12 @@ public class Edge implements EdgeData{
 
     @Override
     public String getInfo() {
-        return null;
+        return Info;
     }
 
     @Override
     public void setInfo(String s) {
-
+    this.Info=s;
     }
 
     @Override
