@@ -20,7 +20,7 @@ public class GUI extends JPanel {
         g.setColor(Color.RED);
         while (Nodes.hasNext()){
             GeoLocation cord=Nodes.next().getLocation();
-            g.fillOval((int)cord.x(),(int)cord.y(),30,40);
+            g.fillOval((int)cord.x(),(int)cord.y(),300,400);
             if(alg.edgeIter(Nodes.next().getKey()).hasNext()) {
                 Iterator<EdgeData> Edges = alg.edgeIter(Nodes.next().getKey());
                 while (Edges.hasNext()) {

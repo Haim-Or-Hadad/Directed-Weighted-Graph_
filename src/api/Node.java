@@ -23,7 +23,7 @@ public class Node implements NodeData {
 
         @Override
         public GeoLocation getLocation() {
-                return null;
+                return this.coordinates;
         }
 
         @Override
