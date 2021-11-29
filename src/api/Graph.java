@@ -7,9 +7,9 @@ import java.util.HashMap;
 public class Graph implements DirectedWeightedGraph {
     private HashMap<Integer, NodeData> nodes;
     private HashMap<Integer, HashMap<Integer, EdgeData>> edges;
-    private int numOfNodes;
-    private int numOfEdges;
-    private int MC;
+    private int numOfNodes=0;
+    private int numOfEdges=0;
+    private int MC=0;
 
     public Graph(){
         this.nodes=new HashMap<>();
@@ -18,6 +18,27 @@ public class Graph implements DirectedWeightedGraph {
         this.numOfEdges=0;
         this.MC=0;
     }
+    public Graph(DirectedWeightedGraph G){
+        this.nodes=new HashMap<>();
+        this.edges=new HashMap<>();
+        Iterator<NodeData>N=G.nodeIter();
+        Iterator<EdgeData>E;
+        while (N.hasNext()){
+            int CurrNodeKey=N.next().getKey();
+            E=G.edgeIter(CurrNodeKey);
+            nodes.put(CurrNodeKey,N.next());
+            this.numOfNodes++;
+            while (E.hasNext()){
+                HashMap<Integer, EdgeData> temp= new HashMap<>();
+                temp.put(E.next().getDest(),E.next());
+                this.numOfEdges++;
+                if (E.hasNext()==false){
+                    edges.put(CurrNodeKey,temp);
+                }
+            }
+        }
+    }
+
 
 
     @Override

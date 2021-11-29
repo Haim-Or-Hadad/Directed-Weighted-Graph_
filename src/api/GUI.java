@@ -2,8 +2,11 @@ package api;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.util.Iterator;
 import java.util.Random;
+import java.awt.geom.Line2D;
+
 
 public class GUI extends JPanel {
 
@@ -19,19 +22,22 @@ public class GUI extends JPanel {
         Iterator<NodeData>Nodes=alg.nodeIter();
         g.setColor(Color.RED);
         while (Nodes.hasNext()){
-            GeoLocation cord=Nodes.next().getLocation();
-            g.fillOval((int)cord.x(),(int)cord.y(),30,40);
-            if(alg.edgeIter(Nodes.next().getKey()).hasNext()) {
-                Iterator<EdgeData> Edges = alg.edgeIter(Nodes.next().getKey());
+            NodeData tempN=Nodes.next();
+            GeoLocation cord=tempN.getLocation();
+            g.fillOval((int)(cord.x()-5),(int)(cord.y()-5),10,10);
+            Iterator<EdgeData> Edges = alg.edgeIter(tempN.getKey());
                 while (Edges.hasNext()) {
                     EdgeData tempE = Edges.next();
                     GeoLocation SrcP = alg.getNode(tempE.getSrc()).getLocation();
                     GeoLocation DestP = alg.getNode(tempE.getDest()).getLocation();
-                    g.drawLine((int) SrcP.x(), (int) SrcP.y(), (int) DestP.x(), (int) DestP.y());
+//                    Graphics2D g2=(Graphics2D)g;
+//                    g2.setStroke(new BasicStroke(10));
+//                    g2.draw(new Line2D.Float((int) SrcP.x(), (int) SrcP.y(), (int) DestP.x(), (int) DestP.y()));
+                    g.drawLine((int) (SrcP.x()*10), (int) (SrcP.y()*10), (int) (DestP.x()*10), (int) (DestP.y()*10));
 
                 }
             }
-        }
+
 
     }
 }
