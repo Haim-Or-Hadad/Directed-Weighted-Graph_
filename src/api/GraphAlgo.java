@@ -1,5 +1,6 @@
 package api;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
@@ -18,26 +19,35 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public DirectedWeightedGraph copy() {
-                if(graph.nodeSize()!=0){
-                        DirectedWeightedGraph graphCopy=new Graph();
-                        for (int i=0;i<=graph.nodeSize();i++){
-                                graphCopy.addNode(new Node(i, graph.getNode(i).getLocation()));
-                                for (int j=0;j<=graph.nodeSize();j++){
-                                        if(graph.getEdge(i,j)!=null){
-                                                EdgeData edge=new Edge(i,j,graph.getEdge(i,j).getWeight());
-                                                graphCopy.connect(edge.getSrc(),edge.getDest(),edge.getWeight());
-                                        }
-                                }
-                        }
-                        return graphCopy;
-                }
-                return null;
+                return new Graph(graph);
         }
 
 
         @Override
         public boolean isConnected() {
-                return false;
+                int i=0;
+                Iterator<NodeData> Nconnect=graph.nodeIter();
+                Iterator<EdgeData> Econnect=graph.edgeIter(i);
+                while(Nconnect.hasNext())
+                {
+                   DFS(graph, Nconnect.next().getKey());
+                   while(Econnect.hasNext())
+                   {
+                       if (Econnect.next().getTag()==-1) {
+                           return false;
+                                }
+                        }
+                }
+                return true;
+        }
+
+        private void DFS(DirectedWeightedGraph graph, int v) {
+                graph.getNode(v).setTag(1);
+                while(graph.edgeIter(v).hasNext()){
+                        if(graph.edgeIter(v).next().getTag()==-1){
+                                DFS(graph,v);
+                        }
+                }
         }
 
         @Override
