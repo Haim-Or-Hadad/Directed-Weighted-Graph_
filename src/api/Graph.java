@@ -32,7 +32,7 @@ public class Graph implements DirectedWeightedGraph {
                 HashMap<Integer, EdgeData> temp= new HashMap<>();
                 temp.put(E.next().getDest(),E.next());
                 this.numOfEdges++;
-                if (E.hasNext()==false){
+                if (!E.hasNext()){
                     edges.put(CurrNodeKey,temp);
                 }
             }
@@ -48,7 +48,7 @@ public class Graph implements DirectedWeightedGraph {
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-        if (edges.containsKey(src) ==false || edges.get(src).containsKey(dest)== false)
+        if (!edges.containsKey(src)|| !edges.get(src).containsKey(dest))
             return null;
         else return edges.get(src).get(dest);
     }
@@ -113,7 +113,7 @@ public class Graph implements DirectedWeightedGraph {
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
-        if(this.edges.containsKey(src) || this.edges.get(src).containsKey(dest))
+        if(!this.edges.containsKey(src) || !this.edges.get(src).containsKey(dest))
             return null;
         EdgeData removedEdge=this.edges.get(src).remove(dest);
         this.MC++;

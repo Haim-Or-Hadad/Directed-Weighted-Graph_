@@ -14,11 +14,11 @@ public class JsonToGraph implements JsonDeserializer<DirectedWeightedGraph> {
             JsonObject jsonObjectNode = nodesArray.get(i).getAsJsonObject();
             JsonElement location = jsonObjectNode.get("pos");
             String s = location.getAsString();
-            String arr[] = s.split(",");
-            double x = Double.parseDouble(arr[0]);
-            double y = Double.parseDouble(arr[1]);
-            double z = Double.parseDouble(arr[2]);
-            geo_location pos = new geo_location(x, y, z);
+            String[] XYZ = s.split(",");
+            double x = Double.parseDouble(XYZ[0]);
+            double y = Double.parseDouble(XYZ[1]);
+            double z = Double.parseDouble(XYZ[2]);
+            GeoLocation pos = new geo_location(x, y, z);
             int key = jsonObjectNode.get("id").getAsInt();
             NodeData n = new Node(key, pos);
             graph.addNode(n);
