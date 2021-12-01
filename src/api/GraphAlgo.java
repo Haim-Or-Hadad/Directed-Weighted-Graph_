@@ -6,7 +6,9 @@ import java.util.List;
 public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         DirectedWeightedGraph graph;
 
-
+        public GraphAlgo(){
+                this.graph=null;
+        }
         @Override
         public void init(DirectedWeightedGraph g) {
                 graph = g;
@@ -25,12 +27,13 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public boolean isConnected() {
-                int i=0;
                 Iterator<NodeData> Nconnect=graph.nodeIter();
-                Iterator<EdgeData> Econnect=graph.edgeIter(i);
+                Iterator<EdgeData> Econnect;
                 while(Nconnect.hasNext())
                 {
-                   DFS(graph, Nconnect.next().getKey());
+                        int x=Nconnect.next().getKey();
+                        Econnect= graph.edgeIter(x);
+                   BFS(graph, x);
                    while(Econnect.hasNext())
                    {
                        if (Econnect.next().getTag()==-1) {
@@ -41,12 +44,14 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 return true;
         }
 
-        private void DFS(DirectedWeightedGraph graph, int v) {
-                graph.getNode(v).setTag(1);
+        private void BFS(DirectedWeightedGraph graph, int v) {
                 while(graph.edgeIter(v).hasNext()){
                         if(graph.edgeIter(v).next().getTag()==-1){
-                                DFS(graph,v);
+                            int temp=graph.edgeIter(v).next().getDest();
+                                graph.getEdge(v,temp).setTag(1);
+                                DFS(graph,temp);
                         }
+                        else continue;
                 }
         }
 
