@@ -29,7 +29,7 @@ public class GUI extends JPanel {
         while (Nodes.hasNext()){
 
             NodeData tempN=Nodes.next();
-            GeoLocation cord=tempN.getLocation();
+             GeoLocation cord=tempN.getLocation();
             double factor_x = getWidth()/(maxX-minX)*0.9;
             double factory= getHeight()/(maxY-minY)*0.9;
             Iterator<EdgeData> Edges = alg.edgeIter(tempN.getKey());
