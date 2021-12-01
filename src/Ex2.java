@@ -1,7 +1,6 @@
 import com.google.gson.*;
 import api.*;
 
-import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
@@ -46,17 +45,14 @@ public class Ex2 {
      *
      */
     public static void runGUI(String json_file) {
-        DirectedWeightedGraph alg = getGrapg(json_file);
-        GUI gui = new GUI(alg);
-        JFrame jf = new JFrame("Graph");
-        jf.setSize(1000,600);
-        jf.setVisible(true);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.add(gui);
+        DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
+        // ****** Add your code here ******
+        //
+        // ********************************
     }
 
     public static void main(String[] args) {
-        runGUI("data/G1.json");
+        DirectedWeightedGraph check=  getGrapg("data/G1.json");
+        check.getNode(4);
     }
-
 }
