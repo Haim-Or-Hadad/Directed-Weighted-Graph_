@@ -14,7 +14,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         DirectedWeightedGraph graph;
 
         public GraphAlgo(){
-                this.graph=null;
+                this.graph=graph;
         }
         @Override
         public void init(DirectedWeightedGraph g) {
@@ -28,7 +28,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public DirectedWeightedGraph copy() {
-                return new Graph(graph);
+                return new Graph();
         }
 
         /**
@@ -89,11 +89,41 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
 
         }
+        private void runIterator(int src , Iterator nodes){
+                int i=0;
+                while(i>src){
+                        nodes.hasNext();
+                }
+        }
+        private void initialTomax(double []arr){
+                for (int i=0 ; i<arr.length;i++){
+                        arr[i]=70;
+                }
+        }
 
         @Override
         public double shortestPathDist(int src, int dest) {
-                return 0;
-        }
+                double[] shortestPath = new double[graph.nodeSize()];
+                initialTomax(shortestPath);
+                shortestPath[src] = 0;
+                Iterator<NodeData> nodes=graph.nodeIter();
+                runIterator(src,nodes);
+                while(nodes.hasNext()) {
+                        NodeData curr_node=this.graph.getNode(nodes.next().getKey());
+                        double saveLastShortPath=(shortestPath[curr_node.getKey()]);
+                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
+                        while(edges.hasNext()) {
+                                EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
+                                if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
+                                {
+                                        shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
+                                }
+                        }
+                        }
+
+                                return shortestPath[dest];
+                        }
+
 
         @Override
         public List<NodeData> shortestPath(int src, int dest) {

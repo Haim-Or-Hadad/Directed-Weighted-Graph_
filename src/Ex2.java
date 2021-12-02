@@ -34,8 +34,8 @@ public class Ex2 {
      */
     public static void runGUI(String json_file) {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
-//        alg.getGraph().removeEdge(1,0); tests for isconnected
-//        alg.getGraph().removeEdge(16,0);
+//        alg.getGraph().removeEdge(1,0);// tests for isconnected
+//        //alg.getGraph().removeEdge(16,0);
 //        alg.getGraph().removeEdge(0,1);
 //        alg.getGraph().removeEdge(0,16);
         GUI gui = new GUI(alg.getGraph());
@@ -44,6 +44,7 @@ public class Ex2 {
         //jf.setPreferredSize(new Dimension(20, 22));
         jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.out.println(alg.isConnected());
+        System.out.println(alg.shortestPathDist(0,4));
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.add(gui);
