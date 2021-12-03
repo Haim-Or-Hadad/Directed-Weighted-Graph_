@@ -5,13 +5,12 @@ import com.google.gson.GsonBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         DirectedWeightedGraph graph;
+        final Double INFINITY=Double.POSITIVE_INFINITY;
+
 
         public GraphAlgo(){
                 this.graph=graph;
@@ -92,22 +91,24 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         private void runIterator(int src , Iterator nodes){
                 int i=0;
                 while(i>src){
-                        nodes.hasNext();
+                        nodes.next();
+                        i++;
                 }
         }
         private void initialTomax(double []arr){
                 for (int i=0 ; i<arr.length;i++){
-                        arr[i]=70;
+                        arr[i]=INFINITY;
                 }
         }
 
         @Override
         public double shortestPathDist(int src, int dest) {
-                double[] shortestPath = new double[graph.nodeSize()];
+                int y=0;
+                double[] shortestPath = new double[graph.nodeSize()+1];
                 initialTomax(shortestPath);
                 shortestPath[src] = 0;
                 Iterator<NodeData> nodes=graph.nodeIter();
-                runIterator(src,nodes);
+               // runIterator(src,nodes);
                 while(nodes.hasNext()) {
                         NodeData curr_node=this.graph.getNode(nodes.next().getKey());
                         double saveLastShortPath=(shortestPath[curr_node.getKey()]);
@@ -117,6 +118,12 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                                 if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
                                 {
                                         shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
+                                        Iterator<EdgeData> edgesTag=graph.edgeIter(curr_node.getKey());
+                                        while(edgesTag.hasNext()) {
+                                                curr_edge.setTag(-1);
+                                                edgesTag.next();
+                                        }
+                                        curr_edge.setTag(curr_edge.getSrc());
                                 }
                         }
                         }
@@ -127,7 +134,18 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public List<NodeData> shortestPath(int src, int dest) {
-                return null;
+                double s,r=shortestPathDist(src,dest);
+                List<NodeData> path = new ArrayList<NodeData>();
+                Iterator<NodeData> nodes=graph.nodeIter();
+                while(nodes.hasNext()){
+                        NodeData curr_node=this.graph.getNode(src);
+                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
+                        while(edges.hasNext()) {
+
+
+                        }
+                }
+                return path;
         }
 
         @Override
