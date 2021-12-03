@@ -12,7 +12,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         final Double INFINITY=Double.POSITIVE_INFINITY;
 
         public GraphAlgo(){
-                this.graph=graph;
+                this.graph=null;
         }
         @Override
         public void init(DirectedWeightedGraph g) {
@@ -98,9 +98,8 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
         }
         private void initialTomax(double []arr){
-                for (int i=0 ; i<arr.length;i++){
-                        arr[i]=INFINITY;
-                }
+                Arrays.fill(arr,INFINITY);
+
         }
 
         @Override
@@ -137,7 +136,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         @Override
         public List<NodeData> shortestPath(int src, int dest) {
                 double s,r=shortestPathDist(src,dest);
-                List<NodeData> path = new ArrayList<NodeData>();
+                List<NodeData> path = new ArrayList<>();
                 Iterator<NodeData> nodes=graph.nodeIter();
                 while(nodes.hasNext()){
                         NodeData curr_node=this.graph.getNode(src);
@@ -152,7 +151,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public NodeData center() {
-                if (isConnected()== false)return null;
+                if (!isConnected())return null;
                 double []sumPath=new double[graph.nodeSize()];
                 int []counter=new int[graph.nodeSize()];
                 Iterator<NodeData> nodes =graph.nodeIter();
@@ -175,8 +174,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                         }
 
                 }
-                NodeData center =graph.getNode(select);
-                return center;
+                return graph.getNode(select);
         }
 
         @Override
@@ -203,6 +201,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                         return false;
                 }
         }
+
         private double[] dijkstra(int src , int dest){
                         double[] shortestPath = new double[graph.nodeSize()+1];
                         initialTomax(shortestPath);
@@ -232,9 +231,9 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         }
         private double ArraySum(double[] shortestPath){
                 double sum=0;
-                for (int i =0;i<shortestPath.length;i++)
-                        if(shortestPath[i]!=INFINITY)
-                        sum+=shortestPath[i];
+                for (double v : shortestPath)
+                        if (v != INFINITY)
+                                sum += v;
                 return sum;
         }
  }
