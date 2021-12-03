@@ -44,16 +44,14 @@ public class Ex2 {
         //jf.setPreferredSize(new Dimension(20, 22));
         jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.out.println(alg.isConnected());
-        System.out.println(alg.shortestPathDist(1,4));
-        for (int i=0;i<alg.shortestPath(1,4).size();i++) {
-            System.out.println(alg.shortestPath(1, 4).get(i).getKey());
-        }
+        System.out.println(alg.shortestPathDist(0,6));
+        System.out.println(alg.center().getKey());
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.add(gui);
     }
 
     public static void main(String[] args) {
-        runGUI("data/myGraph.json");
+        runGUI("data/G1.json");
     }
 }
