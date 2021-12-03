@@ -104,32 +104,8 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public double shortestPathDist(int src, int dest) {
-                int y=0;
-                double[] shortestPath = new double[graph.nodeSize()+1];
-                initialTomax(shortestPath);
-                shortestPath[src] = 0;
-                Iterator<NodeData> nodes=graph.nodeIter();
-               // runIterator(src,nodes);
-                while(nodes.hasNext()) {
-                        NodeData curr_node=this.graph.getNode(nodes.next().getKey());
-                        double saveLastShortPath=(shortestPath[curr_node.getKey()]);
-                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
-                        while(edges.hasNext()) {
-                                EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
-                                if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
-                                {
-                                        shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
-                                        Iterator<EdgeData> edgesTag=graph.edgeIter(curr_node.getKey());
-                                        while(edgesTag.hasNext()) {
-                                                curr_edge.setTag(-1);
-                                                edgesTag.next();
-                                        }
-                                        curr_edge.setTag(curr_edge.getSrc());
-                                }
-                        }
-                        }
-
-                                return shortestPath[dest];
+                double[] distArray=dijkstra(src, dest);
+                return distArray[dest];
                         }
 
 
@@ -176,6 +152,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
                 return graph.getNode(select);
         }
+
 
         @Override
         public List<NodeData> tsp(List<NodeData> cities) {
