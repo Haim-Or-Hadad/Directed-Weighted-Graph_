@@ -42,15 +42,15 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 while(Nodes.hasNext())
                 {
                         int x=Nodes.next().getKey();
-                   BFS(x);
-                   Iterator<NodeData> Is_connected=graph.nodeIter();
-                   while(Is_connected.hasNext())
-                   {
-                       if (Is_connected.next().getTag()==-1) {
-                           return false;
+                        BFS(x);
+                        Iterator<NodeData> Is_connected=graph.nodeIter();
+                        while(Is_connected.hasNext())
+                        {
+                                if (Is_connected.next().getTag()==-1) {
+                                        return false;
                                 }
                         }
-                   RestTags();
+                        RestTags();
                 }
                 return true;
         }
@@ -66,9 +66,9 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         }
 
         /**
-        This function is a BFS algorithm that check if the node sent to the function reach all the nodes in the graph.
-        if the node reach a certain node it change is tag to 1.
-        else the node tag will stay -1 which indicate the node hasn't been visited
+         This function is a BFS algorithm that check if the node sent to the function reach all the nodes in the graph.
+         if the node reach a certain node it change is tag to 1.
+         else the node tag will stay -1 which indicate the node hasn't been visited
          */
         private void BFS(int nodekey) {
                 Queue<NodeData>ConnectedTo= new LinkedList<>();
@@ -100,37 +100,11 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                         arr[i]=INFINITY;
                 }
         }
-
         @Override
         public double shortestPathDist(int src, int dest) {
-                int y=0;
-                double[] shortestPath = new double[graph.nodeSize()+1];
-                initialTomax(shortestPath);
-                shortestPath[src] = 0;
-                Iterator<NodeData> nodes=graph.nodeIter();
-               // runIterator(src,nodes);
-                while(nodes.hasNext()) {
-                        NodeData curr_node=this.graph.getNode(nodes.next().getKey());
-                        double saveLastShortPath=(shortestPath[curr_node.getKey()]);
-                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
-                        while(edges.hasNext()) {
-                                EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
-                                if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
-                                {
-                                        shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
-                                        Iterator<EdgeData> edgesTag=graph.edgeIter(curr_node.getKey());
-                                        while(edgesTag.hasNext()) {
-                                                curr_edge.setTag(-1);
-                                                edgesTag.next();
-                                        }
-                                        curr_edge.setTag(curr_edge.getSrc());
-                                }
-                        }
-                        }
-
-                                return shortestPath[dest];
-                        }
-
+                double[] distArray=dijkstra(src, dest);
+                return distArray[dest-1];
+        }
 
         @Override
         public List<NodeData> shortestPath(int src, int dest) {
@@ -150,8 +124,25 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public NodeData center() {
-                return null;
+                double []sumPath=new double[graph.nodeSize()];
+                Iterator<NodeData> nodes =graph.nodeIter();
+                while(nodes.hasNext()) {
+                        NodeData x=nodes.next();
+                        sumPath[x.getKey()] = ArraySum(dijkstra(x.getKey(), graph.nodeSize()-1));
+                }
+                double min=INFINITY;
+                int select=0;
+                for (int i=0;i<sumPath.length;i++){
+                        if(sumPath[i]<min) {
+                                min = sumPath[i];
+                                select=i;
+                        }
+
+                }
+                NodeData center =graph.getNode(select);
+                return center;
         }
+
 
         @Override
         public List<NodeData> tsp(List<NodeData> cities) {
@@ -177,4 +168,32 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                         return false;
                 }
         }
- }
+        private double[] dijkstra(int src , int dest){
+                double[] shortestPath = new double[graph.nodeSize()+1];
+                initialTomax(shortestPath);
+                shortestPath[src] = 0;
+                Iterator<NodeData> nodes=graph.nodeIter();
+                // runIterator(src,nodes);
+                while(nodes.hasNext()) {
+                        NodeData curr_node=this.graph.getNode(nodes.next().getKey());
+                        double saveLastShortPath=(shortestPath[curr_node.getKey()]);
+                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
+                        while(edges.hasNext()) {
+                                EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
+                                if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
+                                {
+                                        shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
+                                }
+                        }
+                }
+
+                return shortestPath;
+        }
+        private double ArraySum(double[] shortestPath){
+                double sum=0;
+                for (int i =0;i<shortestPath.length;i++)
+                        if(shortestPath[i]!=INFINITY)
+                                sum+=shortestPath[i];
+                return sum;
+        }
+}

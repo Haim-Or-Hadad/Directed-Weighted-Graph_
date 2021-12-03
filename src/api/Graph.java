@@ -55,10 +55,10 @@ public class Graph implements DirectedWeightedGraph {
 
     @Override
     public void addNode(NodeData n) {
-    nodes.put(n.getKey(),n);
-    edges.put(n.getKey(),new HashMap<>());
-    this.numOfNodes++;
-    this.MC++;
+        nodes.put(n.getKey(),n);
+        edges.put(n.getKey(),new HashMap<>());
+        this.numOfNodes++;
+        this.MC++;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Graph implements DirectedWeightedGraph {
         HashMap<Integer,EdgeData> newE=new HashMap<>();
         Iterator<EdgeData>edge;  //Iterator that run over the edges of a specific node
         while (nodeItr.hasNext()){
-           edge=this.edgeIter(nodeItr.next().getKey()); //Iterator get a node to run over
+            edge=this.edgeIter(nodeItr.next().getKey()); //Iterator get a node to run over
             while (edge.hasNext()) {
                 newE.put(nodeItr.next().getKey(),edge.next()); //put the edge in a new Hashmap with the original key.
             }
@@ -98,7 +98,7 @@ public class Graph implements DirectedWeightedGraph {
     @Override
     public NodeData removeNode(int key) {
         if (!this.nodes.containsKey(key))
-        return null;
+            return null;
         else {
             int numofedges = this.edges.size();
             this.edges.remove(key);
