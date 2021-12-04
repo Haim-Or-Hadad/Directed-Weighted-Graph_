@@ -44,7 +44,7 @@ public class Ex2 {
         //jf.setPreferredSize(new Dimension(20, 22));
         jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.out.println(alg.isConnected());
-        System.out.println(alg.shortestPathDist(5,1));
+        System.out.println(alg.shortestPathDist(0,6));
         System.out.println(alg.center().getKey());
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,6 +52,6 @@ public class Ex2 {
     }
 
     public static void main(String[] args) {
-        runGUI("data/myGraph.json");
+        runGUI("data/G1.json");
     }
 }
