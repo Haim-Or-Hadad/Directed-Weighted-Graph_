@@ -24,13 +24,15 @@ public class Graph implements DirectedWeightedGraph {
         Iterator<NodeData>N=G.nodeIter();
         Iterator<EdgeData>E;
         while (N.hasNext()){
-            int CurrNodeKey=N.next().getKey();
+            NodeData curr=N.next();
+            int CurrNodeKey=curr.getKey();
             E=G.edgeIter(CurrNodeKey);
-            nodes.put(CurrNodeKey,N.next());
+            nodes.put(CurrNodeKey,curr);
             this.numOfNodes++;
             while (E.hasNext()){
                 HashMap<Integer, EdgeData> temp= new HashMap<>();
-                temp.put(E.next().getDest(),E.next());
+                EdgeData tempE=E.next();
+                temp.put(tempE.getDest(),tempE);
                 this.numOfEdges++;
                 if (!E.hasNext()){
                     edges.put(CurrNodeKey,temp);

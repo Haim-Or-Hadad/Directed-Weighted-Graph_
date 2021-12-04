@@ -9,7 +9,7 @@ import java.util.*;
 
 public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         DirectedWeightedGraph graph;
-        final Double INFINITY=Double.POSITIVE_INFINITY;
+        private final Double INFINITY=Double.POSITIVE_INFINITY;
 
         public GraphAlgo(){
                 this.graph=null;
@@ -26,7 +26,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public DirectedWeightedGraph copy() {
-                return new Graph();
+                return new Graph(this.graph);
         }
 
         /**
@@ -90,13 +90,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
 
         }
-        private void runIterator(int src , Iterator nodes){
-                int i=0;
-                while(i>src){
-                        nodes.next();
-                        i++;
-                }
-        }
+
         private void initialTomax(double []arr){
                 Arrays.fill(arr,INFINITY);
 
@@ -153,9 +147,21 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 return graph.getNode(select);
         }
 
+        private void createpermute(List<NodeData> cities,int index,List<List<NodeData>> all_permutation){
+                for (int i = index; i < cities.size(); i++) {
+                        Collections.swap(cities, i, index);
+                        createpermute(cities, index + 1, all_permutation);
+                        Collections.swap(cities, index, i);
+                        if (index == cities.size() - 1) {
+                                all_permutation.add(new ArrayList<>(cities));
+                        }
+                }
 
+        }
         @Override
         public List<NodeData> tsp(List<NodeData> cities) {
+                List<List<NodeData>> all_permutation=new LinkedList<>();
+                createpermute(cities,0,all_permutation);
                 return null;
         }
 

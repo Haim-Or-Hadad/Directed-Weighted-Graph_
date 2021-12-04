@@ -1,6 +1,8 @@
 import api.*;
 
 import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
@@ -43,6 +45,11 @@ public class Ex2 {
         jf.setTitle("Graph");
         //jf.setPreferredSize(new Dimension(20, 22));
         jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        List<NodeData> cities= new LinkedList<>();
+        cities.add(alg.getGraph().getNode(0));
+        cities.add(alg.getGraph().getNode(2));
+        cities.add(alg.getGraph().getNode(4));
+        alg.tsp(cities);
         System.out.println(alg.isConnected());
         System.out.println(alg.shortestPathDist(0,6));
         System.out.println(alg.center().getKey());
