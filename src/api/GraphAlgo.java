@@ -156,6 +156,9 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public List<NodeData> tsp(List<NodeData> cities) {
+                double [][] weight=matrixTsp();
+
+
                 return null;
         }
 
@@ -213,4 +216,20 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                                 sum += v;
                 return sum;
         }
+        public double[][] matrixTsp(){
+                int num=this.graph.nodeSize()-1;
+                double[][] weight=new double[num][num];
+                Iterator<NodeData> nodes=graph.nodeIter();
+                Iterator<EdgeData> edges=graph.edgeIter(nodes.next().getKey());
+                while(nodes.hasNext()){
+                        while (edges.hasNext()){
+                                        EdgeData curr=edges.next();
+                                weight[nodes.next().getKey()][curr.getDest()]=curr.getWeight();
+                        }
+
+
+                }
+                return weight;
+        }
+
  }

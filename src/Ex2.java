@@ -1,6 +1,7 @@
 import api.*;
 
 import javax.swing.*;
+import java.util.List;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
@@ -46,6 +47,10 @@ public class Ex2 {
         System.out.println(alg.isConnected());
         System.out.println(alg.shortestPathDist(0,6));
         System.out.println(alg.center().getKey());
+//        List<NodeData> cities = null;
+//        NodeData node=alg.getGraph().getNode(5);
+//        cities.add(node);
+//        alg.tsp(cities);
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.add(gui);
