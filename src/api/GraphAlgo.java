@@ -122,24 +122,30 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         @Override
         public NodeData center() {
                 if (!isConnected())return null;
-                double []sumPath=new double[graph.nodeSize()];
-                int []counter=new int[graph.nodeSize()];
+                double []sumPath=new double[graph.nodeSize()+1];
+                double []counter=new double[graph.nodeSize()+1];
                 Iterator<NodeData> nodes =graph.nodeIter();
                 while(nodes.hasNext()) {
+                        double max=Integer.MIN_VALUE;
                         NodeData x = nodes.next();
                         Iterator<EdgeData> edges=graph.edgeIter(x.getKey());
                             for(int i=0;i<graph.nodeSize();i++){
-                                if(shortestPathDist(x.getKey(), i)!=INFINITY)
-                                sumPath[x.getKey()] += shortestPathDist(x.getKey(), i);
-                                counter[x.getKey()] +=1;
-                        //sumPath[x.getKey()] = ArraySum(dijkstra(x.getKey(), i));
+                                    if(graph.getNode(i)!=null) {
+                                            double curr = shortestPathDist(x.getKey(), i);
+                                            if (curr != INFINITY)
+                                                    sumPath[x.getKey()] += shortestPathDist(x.getKey(), i);
+                                            if (curr > max) {
+                                                    max = curr;
+                                            }
+                                    }
                 }
+                        counter[x.getKey()] +=max;
                   }
-                double min=INFINITY;
+                double min1=INFINITY;
                 int select=0;
-                for (int i=0;i<sumPath.length;i++){
-                        if(sumPath[i]<min&&counter[i]==graph.nodeSize()) {
-                                min = sumPath[i];
+                for (int i=0;i<counter.length;i++){
+                        if(counter[i]<min1&&counter[i]!=0) {
+                                min1 = counter[i];
                                 select=i;
                         }
 

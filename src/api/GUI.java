@@ -2,6 +2,8 @@ package api;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.Iterator;
@@ -10,6 +12,10 @@ import java.util.Iterator;
 public class GUI extends JPanel {
 
     private final DirectedWeightedGraph alg;
+    JButton removeButton=new JButton();
+    private JSpinner removeSpinner;
+    private JMenuItem k = new JMenuItem("1");
+    final JPopupMenu menu = new JPopupMenu();
 
     public GUI(DirectedWeightedGraph alg){
         this.alg=alg;
@@ -17,6 +23,8 @@ public class GUI extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        this.setVisible(false);
+        this.setVisible(true);
         Iterator<NodeData>Nodes=alg.nodeIter();
         g.setColor(Color.BLACK);
         Graphics2D g2=(Graphics2D)g;
@@ -44,6 +52,21 @@ public class GUI extends JPanel {
             Ellipse2D.Double node = new Ellipse2D.Double((cord.x()-minX)*factor_x+15, (cord.y()-minY)*factory+15, 14, 14);
             g2.fill(node);
         }
+        createRemoveButton();
+    }
+    private void createRemoveButton(){
+        removeButton.setLocation(0,0);
+        removeButton.setSize(100,50);
+        removeButton.setText("remove");
+        this.add(removeButton);
+        removeButton.add(k);
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                alg.removeNode(4);
+            }
+        });
     }
     private double findMinX(){
         double min=Integer.MAX_VALUE;

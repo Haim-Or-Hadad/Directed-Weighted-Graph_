@@ -45,7 +45,9 @@ public class Graph implements DirectedWeightedGraph {
 
     @Override
     public NodeData getNode(int key) {
+        if(nodes.containsKey(key))
         return nodes.get(key);
+        return null;
     }
 
     @Override
@@ -102,15 +104,22 @@ public class Graph implements DirectedWeightedGraph {
         if (!this.nodes.containsKey(key))
             return null;
         else {
-            int numofedges = this.edges.size();
-            this.edges.remove(key);
-            this.numOfEdges=this.numOfEdges-numofedges;
-            this.MC=this.MC-numofedges;
+            Iterator<NodeData>Nodes=nodeIter();
+            while (Nodes.hasNext()){
+                NodeData curr= Nodes.next();
+                if (edges.get(curr.getKey()).containsKey(key)){
+                    edges.get(curr.getKey()).remove(key);
+                    this.numOfEdges--;
+                    this.MC++;
+
+                }
+            }
+            this.numOfEdges-=edges.get(key).size();
+            edges.remove(key);
+            this.numOfNodes--;
             return this.nodes.remove(key);
-            /*
-            פה צריך לעבור על הedges ולמחוק את כל הצלעות שמגיעות לקודקוד הזה
-             */
         }
+
     }
 
     @Override

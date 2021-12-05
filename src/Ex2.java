@@ -50,9 +50,11 @@ public class Ex2 {
         cities.add(alg.getGraph().getNode(2));
         cities.add(alg.getGraph().getNode(4));
         alg.tsp(cities);
+        //alg.getGraph().removeNode(4);
         System.out.println(alg.isConnected());
         System.out.println(alg.shortestPathDist(0,6));
         System.out.println(alg.center().getKey());
+        //alg.getGraph().removeNode(4);
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.add(gui);
