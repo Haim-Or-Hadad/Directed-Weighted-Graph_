@@ -40,7 +40,7 @@ public class Ex2 {
 //        //alg.getGraph().removeEdge(16,0);
 //        alg.getGraph().removeEdge(0,1);
 //        alg.getGraph().removeEdge(0,16);
-        GUI gui = new GUI(alg.getGraph());
+        GUI gui = new GUI(alg);
         JFrame jf = new JFrame();
         jf.setTitle("Graph");
         //jf.setPreferredSize(new Dimension(20, 22));

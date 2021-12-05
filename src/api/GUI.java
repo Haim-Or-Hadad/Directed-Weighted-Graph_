@@ -114,7 +114,7 @@ public class GUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-            alg.addNode(new Node(alg.nodeSize()+1,new geo_location(35.5,32.1,0.0)));
+            alg.addNode(new Node(alg.nodeSize()+1,new geo_location(32.5,32.1,0.0)));
             }
         });
     }
