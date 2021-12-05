@@ -1,24 +1,48 @@
 package api;
 
+import api.DirectedWeightedGraph;
+import api.EdgeData;
+import api.GeoLocation;
+import api.NodeData;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.util.Iterator;
 
 
 public class GUI extends JPanel {
-
-    private final DirectedWeightedGraph alg;
+    private  DirectedWeightedGraphAlgorithms graphalgo;
+    private  DirectedWeightedGraph alg;
     JButton removeButton=new JButton();
-    private JSpinner removeSpinner;
-    private JMenuItem k = new JMenuItem("1");
-    final JPopupMenu menu = new JPopupMenu();
+    JButton addButton=new JButton();
+    private JSpinner spinner;
+    private JMenuBar Menu = new JMenuBar();
+    private JMenu file = new JMenu("File");
+    private JMenuItem LoadFile= new JMenuItem("Load File");
+    SpinnerModel mode1;
+    private JButton button1;
+    JLabel zipLabel = new JLabel("Node:");
 
-    public GUI(DirectedWeightedGraph alg){
-        this.alg=alg;
+
+
+    public GUI(DirectedWeightedGraphAlgorithms alg){
+        this.graphalgo=alg;
+        this.alg=alg.getGraph();
+        Menu();
+        createAddButton();
+        createRemoveButton();
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -37,8 +61,8 @@ public class GUI extends JPanel {
         while (Nodes.hasNext()){
 
             NodeData tempN=Nodes.next();
-             GeoLocation cord=tempN.getLocation();
-            double factor_x = getWidth()/(maxX-minX)*0.9;
+            GeoLocation cord=tempN.getLocation();
+           double factor_x = getWidth()/(maxX-minX)*0.9;
             double factory= getHeight()/(maxY-minY)*0.9;
             Iterator<EdgeData> Edges = alg.edgeIter(tempN.getKey());
             while (Edges.hasNext()) {
@@ -52,21 +76,89 @@ public class GUI extends JPanel {
             Ellipse2D.Double node = new Ellipse2D.Double((cord.x()-minX)*factor_x+15, (cord.y()-minY)*factory+15, 14, 14);
             g2.fill(node);
         }
-        createRemoveButton();
+        Menu.setLocation(0,0);
+        Menu.setSize(50,50);
+
+
+
+    }
+    private void createSpinner(){
+        mode1 = new SpinnerNumberModel(1,0,alg.nodeSize(),1);
+        spinner=new JSpinner(mode1);
+        spinner.setBounds(0,50,50,50);
+        spinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+//             this.setText("Value : " + ((JSpinner)e.getSource()).getValue());
+            }
+        });
+        this.add(spinner);
     }
     private void createRemoveButton(){
-        removeButton.setLocation(0,0);
+        removeButton.setLocation(0,50);
         removeButton.setSize(100,50);
         removeButton.setText("remove");
         this.add(removeButton);
-        removeButton.add(k);
-        removeButton.addActionListener(new ActionListener() {
+        createSpinner();
+        removeButton.addActionListener(e -> {
+            int removeNode= Integer.parseInt(spinner.getValue().toString());
+            alg.removeNode(removeNode);
+        });
+    }
+    private void createAddButton(){
+        addButton.setLocation(0,100);
+        addButton.setSize(100,50);
+        addButton.setText("Add Node");
+        this.add(addButton);
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                alg.removeNode(4);
+            alg.addNode(new Node(alg.nodeSize()+1,new geo_location(35.5,32.1,0.0)));
             }
         });
+    }
+
+    public void Menu(){
+        Menu.setLocation(0,0);
+        Menu.setSize(25,25);
+        Menu.add(file);
+        file.add(LoadFile);
+        JFileChooser fileChooser = new JFileChooser();
+
+        LoadFile.addActionListener(e -> {
+            String s=filechooser();
+            if(s!=null) {
+                graphalgo.load(s);
+                alg = graphalgo.getGraph();
+            }
+            return;
+             });
+        this.add(Menu);
+        this.setVisible(true);
+
+
+    }
+    private String filechooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        String path="";
+        fileChooser.setDialogTitle("Open Json File");
+        String yourPath = "D:\\Users\\Ilan\\Ex2_OOP\\data";
+        File directory = new File(yourPath);
+        fileChooser.setCurrentDirectory(directory);
+        FileFilter filter = new FileNameExtensionFilter("Json File", "json");
+        fileChooser.setFileFilter(filter);
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+
+
+            File selectedFile = fileChooser.getSelectedFile();
+             path = selectedFile.getAbsolutePath();
+        }
+        else if(JFileChooser.CANCEL_OPTION == result)
+            return null;
+
+        return path;
     }
     private double findMinX(){
         double min=Integer.MAX_VALUE;
