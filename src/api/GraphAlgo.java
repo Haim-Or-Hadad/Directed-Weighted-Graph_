@@ -99,13 +99,13 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         @Override
         public double shortestPathDist(int src, int dest) {
-                return dijkstra(src, dest);
+                return dijkstra(src, dest,1);
                         }
 
 
         @Override
         public List<NodeData> shortestPath(int src, int dest) {
-                dijkstra(src,dest);
+                dijkstra(src,dest,0);
                 List<NodeData> path = new ArrayList<>();
                 if(graph.getNode(dest)!=null) {
                         NodeData currNode = graph.getNode(dest);
@@ -272,14 +272,15 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 //                        return shortestPath;
 //        }
 
-        private double dijkstra(int src , int dest){
+        private double dijkstra(int src , int dest,int type){
+                if (graph.getNode(src)==null||graph.getNode(dest)==null)
+                        throw new RuntimeException("one of the nodes dosent exist");
                 if (src!=lastsrc){
                         lastsrc=src;
                         RestTags_Info();
                 }
                 Node srcNode=(Node) graph.getNode(src);
-                Node DestNode=(Node) graph.getNode(dest);
-                if(srcNode.getfrom_min(dest)!=Double.MAX_VALUE) {
+                if(srcNode.getfrom_min(dest)!=Double.MAX_VALUE&&type==1) {
                         return srcNode.getfrom_min(dest);
                 }
                 Queue<NodeData>nodesQ= new LinkedList<>();

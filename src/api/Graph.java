@@ -113,6 +113,7 @@ public class Graph implements DirectedWeightedGraph {
                     this.numOfEdges--;
                     this.MC++;
 
+
                 }
             }
             this.numOfEdges-=edges.get(key).size();
@@ -128,6 +129,8 @@ public class Graph implements DirectedWeightedGraph {
         if(!this.edges.containsKey(src) || !this.edges.get(src).containsKey(dest))
             return null;
         EdgeData removedEdge=this.edges.get(src).remove(dest);
+        Node srcnode=(Node)nodes.get(src);
+        srcnode.remove_dist(dest);
         this.MC++;
         this.numOfEdges--;
         return removedEdge;

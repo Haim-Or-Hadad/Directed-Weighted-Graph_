@@ -22,6 +22,11 @@ public class Node implements NodeData {
         public int get_min_dist_size(){
                 return min_dist_from.size();
         }
+        public void remove_dist(int dest){
+                if(min_dist_from.containsKey(dest)) {
+                        min_dist_from.remove(dest);
+                }
+        }
         public Double getfrom_min(int key){
                 if (min_dist_from.containsKey(key)){
                         return min_dist_from.get(key);

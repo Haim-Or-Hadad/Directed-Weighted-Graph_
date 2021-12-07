@@ -86,8 +86,9 @@ class GraphAlgo_Test {
         TestGraphAlgo.init(TestGraph);
         TestGraph.removeEdge(2,5);
         TestGraphAlgo.init(TestGraph);
+        TestGraphAlgo.shortestPathDist(2, 5);
         dist = TestGraphAlgo.shortestPathDist(2, 5);
-        assertEquals(Double.POSITIVE_INFINITY, dist);
+        assertEquals(Double.MAX_VALUE, dist);
 
         assertThrows(RuntimeException.class, () -> graphalgo.shortestPathDist(2, 10));
     }
