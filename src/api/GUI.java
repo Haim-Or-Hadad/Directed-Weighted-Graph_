@@ -21,10 +21,11 @@ public class GUI extends JPanel {
     JButton removeButton=new JButton();
     JButton addButton=new JButton();
     private JSpinner spinner;
+    private JSpinner X_spinner,y_spinner;
     private JMenuBar Menu = new JMenuBar();
     private JMenu file = new JMenu("File");
     private JMenuItem LoadFile= new JMenuItem("Load File");
-    SpinnerModel mode1;
+    SpinnerModel mode1,mode2,mode3;
     private JButton button1;
     JLabel zipLabel = new JLabel("Node:");
 
@@ -79,9 +80,6 @@ public class GUI extends JPanel {
         mode1 = new SpinnerNumberModel(1,0,alg.nodeSize(),1);
         spinner=new JSpinner(mode1);
         spinner.setBounds(0,50,50,50);
-        spinner.addChangeListener(e -> {
-//             this.setText("Value : " + ((JSpinner)e.getSource()).getValue());
-        });
         this.add(spinner);
     }
     private void createRemoveButton(){
@@ -95,12 +93,27 @@ public class GUI extends JPanel {
             alg.removeNode(removeNode);
         });
     }
+    private void createSpinner1_2() {
+        mode2 = new SpinnerNumberModel(findMinX(), findMinX(),findMaxX(), 0.001);
+        X_spinner = new JSpinner(mode2);
+        X_spinner.setBounds(0, 100, 100, 100);
+        mode3 = new SpinnerNumberModel(findMiny(), findMiny(),findMaxy(), 0.001);
+        y_spinner = new JSpinner(mode3);
+        y_spinner.setBounds(0, 100, 100, 100);
+        this.add(X_spinner);
+        this.add(y_spinner);
+    }
     private void createAddButton(){
         addButton.setLocation(0,100);
         addButton.setSize(100,50);
         addButton.setText("Add Node");
         this.add(addButton);
-        addButton.addActionListener(e -> alg.addNode(new Node(alg.nodeSize()+1,new geo_location(32.5,32.1,0.0))));
+        createSpinner1_2();
+        addButton.addActionListener(e -> {
+            double add_x= Double.parseDouble(X_spinner.getValue().toString());
+            double add_y= Double.parseDouble(y_spinner.getValue().toString());
+            alg.addNode(new Node(alg.nodeSize()+1,new geo_location(add_x,32.104354472268904,0.0)));
+        });
     }
 
     public void Menu(){
