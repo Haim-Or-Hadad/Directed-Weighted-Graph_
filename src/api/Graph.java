@@ -1,7 +1,6 @@
 package api;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.HashMap;
 
 public class Graph implements DirectedWeightedGraph {
@@ -29,15 +28,13 @@ public class Graph implements DirectedWeightedGraph {
             E=G.edgeIter(CurrNodeKey);
             nodes.put(CurrNodeKey,curr);
             this.numOfNodes++;
+            HashMap<Integer, EdgeData> temp= new HashMap<>();
             while (E.hasNext()){
-                HashMap<Integer, EdgeData> temp= new HashMap<>();
+                this.numOfEdges++;
                 EdgeData tempE=E.next();
                 temp.put(tempE.getDest(),tempE);
-                this.numOfEdges++;
-                if (!E.hasNext()){
-                    edges.put(CurrNodeKey,temp);
-                }
             }
+            edges.put(CurrNodeKey,temp);
         }
     }
 
@@ -81,13 +78,17 @@ public class Graph implements DirectedWeightedGraph {
 
     @Override
     public Iterator<EdgeData> edgeIter() {
+        int i=0;
         Iterator<NodeData> nodeItr=this.nodeIter(); //Iterator that run over the nodes.
         HashMap<Integer,EdgeData> newE=new HashMap<>();
         Iterator<EdgeData>edge;  //Iterator that run over the edges of a specific node
         while (nodeItr.hasNext()){
-            edge=this.edgeIter(nodeItr.next().getKey()); //Iterator get a node to run over
+            NodeData curr_node=nodeItr.next();
+            edge=this.edgeIter(curr_node.getKey()); //Iterator get a node to run over
             while (edge.hasNext()) {
-                newE.put(nodeItr.next().getKey(),edge.next()); //put the edge in a new Hashmap with the original key.
+                newE.put(i,edge.next());
+                i++;
+
             }
         }
 

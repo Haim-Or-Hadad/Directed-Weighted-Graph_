@@ -1,10 +1,6 @@
 package api;
 
-import api.DirectedWeightedGraph;
-import api.EdgeData;
-import api.GeoLocation;
-import api.NodeData;
-
+import api.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -15,10 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.util.Iterator;
 
 
@@ -77,7 +70,7 @@ public class GUI extends JPanel {
             g2.fill(node);
         }
         Menu.setLocation(0,0);
-        Menu.setSize(50,50);
+        Menu.setSize(28,20);
 
 
 
@@ -86,11 +79,8 @@ public class GUI extends JPanel {
         mode1 = new SpinnerNumberModel(1,0,alg.nodeSize(),1);
         spinner=new JSpinner(mode1);
         spinner.setBounds(0,50,50,50);
-        spinner.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
+        spinner.addChangeListener(e -> {
 //             this.setText("Value : " + ((JSpinner)e.getSource()).getValue());
-            }
         });
         this.add(spinner);
     }
@@ -110,13 +100,7 @@ public class GUI extends JPanel {
         addButton.setSize(100,50);
         addButton.setText("Add Node");
         this.add(addButton);
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            alg.addNode(new Node(alg.nodeSize()+1,new geo_location(32.5,32.1,0.0)));
-            }
-        });
+        addButton.addActionListener(e -> alg.addNode(new Node(alg.nodeSize()+1,new geo_location(32.5,32.1,0.0))));
     }
 
     public void Menu(){
@@ -124,15 +108,13 @@ public class GUI extends JPanel {
         Menu.setSize(25,25);
         Menu.add(file);
         file.add(LoadFile);
-        JFileChooser fileChooser = new JFileChooser();
-
         LoadFile.addActionListener(e -> {
             String s=filechooser();
             if(s!=null) {
                 graphalgo.load(s);
                 alg = graphalgo.getGraph();
             }
-            return;
+
              });
         this.add(Menu);
         this.setVisible(true);

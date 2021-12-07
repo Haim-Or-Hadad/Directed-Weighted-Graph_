@@ -1,8 +1,8 @@
 package api;
 
 public class Edge implements EdgeData{
-    private int src;
-    private int dest;
+    private final int src;
+    private final int dest;
     private double weight;
     private int Tag;
     private String Info;

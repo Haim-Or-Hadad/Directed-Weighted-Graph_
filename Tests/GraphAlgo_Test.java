@@ -1,7 +1,6 @@
 package Tests;
 
 import api.*;
-import org.junit.After;
 import org.junit.jupiter.api.*;
 
 import java.util.LinkedList;

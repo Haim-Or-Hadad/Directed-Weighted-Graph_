@@ -2,14 +2,18 @@ package api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         DirectedWeightedGraph graph;
         private final Double INFINITY=Double.POSITIVE_INFINITY;
+        private int lastsrc;
 
         public GraphAlgo(){
                 this.graph=null;
@@ -37,6 +41,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
          */
         @Override
         public boolean isConnected() {
+                RestTags_Info();
                 Iterator<NodeData> Nodes=graph.nodeIter();
                 while(Nodes.hasNext())
                 {
@@ -49,7 +54,7 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                            return false;
                                 }
                         }
-                        RestTags_Info();
+
                 }
                 return true;
         }
@@ -91,48 +96,47 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         }
 
-        private void initialTomax(double []arr){
-                Arrays.fill(arr,INFINITY);
-
-        }
 
         @Override
         public double shortestPathDist(int src, int dest) {
-                double[] distArray=dijkstra(src, dest);
-                return distArray[dest];
+                return dijkstra(src, dest);
                         }
 
 
         @Override
         public List<NodeData> shortestPath(int src, int dest) {
-                double s,r=shortestPathDist(src,dest);
+                dijkstra(src,dest);
                 List<NodeData> path = new ArrayList<>();
-                Iterator<NodeData> nodes=graph.nodeIter();
-                while(nodes.hasNext()){
-                        NodeData curr_node=this.graph.getNode(src);
-                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
-                        while(edges.hasNext()) {
-
+                if(graph.getNode(dest)!=null) {
+                        NodeData currNode = graph.getNode(dest);
+                        while (currNode.getKey() != src) {
+                                path.add(currNode);
+                                int prev = currNode.getTag();
+                                currNode = graph.getNode(prev);
                         }
+                        path.add(graph.getNode(src));
+                        List<NodeData> newpath = new ArrayList<>();
+
+                        for (int i = path.size() - 1; i >= 0; i--) {
+                                newpath.add(path.get(i));
+                        }
+
+                        return newpath;
                 }
-                return path;
+                else return null;
         }
 
         @Override
         public NodeData center() {
                 if (!isConnected())return null;
-                double []sumPath=new double[graph.nodeSize()+1];
                 double []counter=new double[graph.nodeSize()+1];
                 Iterator<NodeData> nodes =graph.nodeIter();
                 while(nodes.hasNext()) {
                         double max=Integer.MIN_VALUE;
                         NodeData x = nodes.next();
-                        Iterator<EdgeData> edges=graph.edgeIter(x.getKey());
                             for(int i=0;i<graph.nodeSize();i++){
                                     if(graph.getNode(i)!=null) {
                                             double curr = shortestPathDist(x.getKey(), i);
-                                            if (curr != INFINITY)
-                                                    sumPath[x.getKey()] += shortestPathDist(x.getKey(), i);
                                             if (curr > max) {
                                                     max = curr;
                                             }
@@ -147,7 +151,6 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                                 min1 = counter[i];
                                 select=i;
                         }
-
                 }
                 return graph.getNode(select);
         }
@@ -166,13 +169,60 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         @Override
         public List<NodeData> tsp(List<NodeData> cities) {
                 List<List<NodeData>> all_permutation=new LinkedList<>();
-                createpermute(cities,0,all_permutation);
-                return null;
+                createpermute(cities,0,all_permutation);//insert all the permutation to the list
+                double mindist=INFINITY; //min dist that indicate which permutation has the shortest distance
+                int per_num=0; //the permutation number in the list
+                for (int i=0;i<all_permutation.size();i++){
+                        List<NodeData> curr_per=all_permutation.get(i); //select a permutation
+                        double curr_per_dist=0;// dist for the curr permutation
+                        for (int j=0;j<curr_per.size()-1;j++){
+                                curr_per_dist+=shortestPathDist(curr_per.get(j).getKey(),curr_per.get(j+1).getKey()); //check for src to dist at this permutation
+                        }
+                        if (curr_per_dist<mindist){ //if this permutation distance is lower then mindist then she is the shortest permutation.
+                                mindist=curr_per_dist;
+                                per_num=i;
+                        }
+                }
+                return all_permutation.get(per_num);
         }
 
         @Override
         public boolean save(String file) {
-                return false;
+                try {
+                        JsonWriter writer =new JsonWriter(new FileWriter(file+".json"));
+                        writer.beginObject();
+                        writer.name("Edges");
+                        writer.beginArray();
+                        Iterator<EdgeData>edges=this.graph.edgeIter();
+                        while (edges.hasNext()) {
+                                writer.beginObject();
+                                EdgeData curr_edge = edges.next();
+                                writer.name("src").value(curr_edge.getSrc());
+                                writer.name("w").value(curr_edge.getWeight());
+                                writer.name("dest").value(curr_edge.getDest());
+                                writer.endObject();
+                        }
+                        writer.endArray();
+                        writer.name("Nodes");
+                        writer.beginArray();
+                        Iterator<NodeData>nodes=this.graph.nodeIter();
+                        while (nodes.hasNext()){
+                                writer.beginObject();
+                                NodeData curr_Node= nodes.next();
+                                String pos=curr_Node.getLocation().x()+","+curr_Node.getLocation().y()+","+curr_Node.getLocation().z();
+                                writer.name("pos").value(pos);
+                                writer.name("id").value(curr_Node.getKey());
+                                writer.endObject();
+                        }
+                        writer.endArray();
+                        writer.endObject();
+                        writer.close();
+                }
+               catch (IOException e) {
+                        e.printStackTrace();
+                        return false;
+                }
+                return true;
         }
 
         @Override
@@ -190,32 +240,72 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
         }
 
-        private double[] dijkstra(int src , int dest){
-                        double[] shortestPath = new double[graph.nodeSize()+1];
-                        initialTomax(shortestPath);
-                        shortestPath[src] = 0;
-                        Queue<NodeData>nodesQ= new LinkedList<>();
-                        nodesQ.add(graph.getNode(src));
-                        // runIterator(src,nodes);
-                        while(!nodesQ.isEmpty()) {
-                                NodeData curr_node=nodesQ.poll();
-                                curr_node.setInfo("Black");
-                                double saveLastShortPath=(shortestPath[curr_node.getKey()]);
-                                Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
-                                while(edges.hasNext()) {
-                                        EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
-                                        if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
-                                        {
-                                                shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
-                                        }
-                                        NodeData temp=graph.getNode(curr_edge.getDest());
-                                        if (temp.getInfo()=="White")
-                                                nodesQ.add(temp);
+//        private double[] dijkstra(int src , int dest){
+//                        RestTags_Info();
+//                        //PriorityQueue<NodeData> nodesQ=new PriorityQueue<>(Comparator.comparingDouble(NodeData::getWeight));
+//
+//                        double[] shortestPath = new double[graph.nodeSize()+1];
+//                        initialTomax(shortestPath);
+//                        shortestPath[src] = 0;
+//                        Queue<NodeData>nodesQ= new LinkedList<>();
+//                        nodesQ.add(graph.getNode(src));
+//                        // runIterator(src,nodes);
+//                        while(!nodesQ.isEmpty()) {
+//                                NodeData curr_node=nodesQ.poll();
+//                                curr_node.setInfo("Black");
+//                                double saveLastShortPath=(shortestPath[curr_node.getKey()]);
+//                                Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
+//                                while(edges.hasNext()) {
+//                                        EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
+//                                        if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
+//                                        {
+//                                                NodeData temp=graph.getNode(curr_edge.getDest());
+//                                                shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
+//                                                temp.setTag(curr_edge.getSrc());
+//                                        }
+//                                        NodeData temp=graph.getNode(curr_edge.getDest());
+//                                        if (Objects.equals(temp.getInfo(), "White"))
+//                                                nodesQ.add(temp);
+//
+//                                }
+//                        }
+//                        return shortestPath;
+//        }
+
+        private double dijkstra(int src , int dest){
+                if (src!=lastsrc){
+                        lastsrc=src;
+                        RestTags_Info();
+                }
+                Node srcNode=(Node) graph.getNode(src);
+                Node DestNode=(Node) graph.getNode(dest);
+                if(srcNode.getfrom_min(dest)!=Double.MAX_VALUE) {
+                        return srcNode.getfrom_min(dest);
+                }
+                Queue<NodeData>nodesQ= new LinkedList<>();
+                nodesQ.add(graph.getNode(src));
+                while(!nodesQ.isEmpty()) {
+                        Node curr_node=(Node)nodesQ.poll();
+                        curr_node.min_update(curr_node.getKey(),curr_node.getWeight());
+                        curr_node.setInfo("Black");
+                        Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
+                        while(edges.hasNext()) {
+                                EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
+                                NodeData curr_dest= graph.getNode(curr_edge.getDest());
+                                if ((curr_edge.getWeight()+srcNode.getfrom_min(curr_node.getKey()) <= srcNode.getfrom_min(curr_dest.getKey())))
+                                {
+
+                                        srcNode.min_update(curr_dest.getKey(),curr_edge.getWeight()+srcNode.getfrom_min(curr_edge.getSrc()));
+                                        curr_dest.setTag(curr_node.getKey());
 
                                 }
+                                if (Objects.equals(curr_dest.getInfo(), "White"))
+                                        nodesQ.add(curr_dest);
+
                         }
-                        RestTags_Info();
-                        return shortestPath;
+                }
+
+                return srcNode.getfrom_min(dest);
         }
         private double ArraySum(double[] shortestPath){
                 double sum=0;

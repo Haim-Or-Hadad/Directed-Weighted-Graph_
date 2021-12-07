@@ -1,3 +1,4 @@
+import api.GUI;
 import api.*;
 
 import javax.swing.*;
@@ -46,13 +47,15 @@ public class Ex2 {
         //jf.setPreferredSize(new Dimension(20, 22));
         jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
         List<NodeData> cities= new LinkedList<>();
-        cities.add(alg.getGraph().getNode(0));
-        cities.add(alg.getGraph().getNode(2));
-        cities.add(alg.getGraph().getNode(4));
-        alg.tsp(cities);
+//        cities.add(alg.getGraph().getNode(7));
+//        cities.add(alg.getGraph().getNode(36));
+//        cities.add(alg.getGraph().getNode(12));
+//        cities.add(alg.getGraph().getNode(40));
+//        cities=alg.tsp(cities);
         //alg.getGraph().removeNode(4);
-        System.out.println(alg.isConnected());
-        System.out.println(alg.shortestPathDist(0,6));
+//        System.out.println(alg.isConnected());
+        List<NodeData> als=alg.shortestPath(0,12);
+        //List<NodeData> als=alg.shortestPath(16,2);
         System.out.println(alg.center().getKey());
         //alg.getGraph().removeNode(4);
         jf.setVisible(true);
@@ -61,6 +64,6 @@ public class Ex2 {
     }
 
     public static void main(String[] args) {
-        runGUI("data/G1.json");
+        runGUI("data/1000Nodes.json");
     }
 }
