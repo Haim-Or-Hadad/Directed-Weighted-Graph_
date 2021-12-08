@@ -1,15 +1,20 @@
 #  **Exercise 2**
 ## **Directed Weighted Graph**
 ### Introduction:
-This project is dedicated to planning and implementaion of Directed Weight Graps with data sturcture. <br/> 
+This project is dedicated for planning and implement of a Directed Weight Graphs with data sturctures. <br/> 
 Graph is a structure with sets of nodes and edges. when the nodes are objects on the space and the edges <br/>
-are connect between them .<br/>
+are connecting between them .<br/>
 In this task we need to get files that contains list of vertexs and edges and firstly create objects and structure<br/> 
-for the them and for the graph that will describe them together.
-Then we should use in our graph and run <br/>
-algoritems on him.<br/>
-In addition the project includes a GUI interface that draws graph on the screen and do some methods on him.
+for them and for the graph that will present them together.
+Then we use the graph for testing and running diffrent algorithms . <br/>
+In addition the project includes a GUI interface that draws graph on the screen and run diffrent functions on him.
+
 ## api(packeage)
+### JsonToGraph
+JsonToGraph  deserialize the graph json file and create a new graph (constructor) , using gson library functions.
+This function run complexity time O(e)/O(n). |E|=e(edges) , |V|=n(nodes) , the json file include edges and nodes and the function <br/>
+create a graph running on each of them separately. 
+This function complexity time is O(e) if we get more edges then nodes. 
 ### geo_location
 geo_location this class that implements GeoLocation interface , This interface represents a geo location <x,y,z>.
 Methods       | Performs
@@ -76,9 +81,25 @@ The class implement the interface **Directed Weighted Graph**, This interface re
 The interface has a road-system or communication network in mind - and should support a large number of nodes . our implemention <br/>
 based on an hashmapes and this an efficient compact representation. <br/>
 ***New Fields*** <br/>
-- private HashMap<Integer, NodeData> nodes - 
-- private HashMap<Integer, HashMap<Integer, EdgeData>> edges;
-- private int numOfNodes=0;
-- private int numOfEdges=0;
-- private int MC=0
+- private HashMap<Integer, NodeData> nodes - data structures that save the nodes , key 1 is node 1.
+- private HashMap<Integer, HashMap<Integer, EdgeData>> edges - data structure that save for any node is edges .
+- private int numOfNodes - num of the nodes in the graph.
+- private int numOfEdges - num of the edge in the graph.
+- private int MC - changes in the graph . </br>
 
+**we add to the table a complexity time of graph methods **  <br/>
+
+ Methods       | Performs | Complexity
+--------------------------|-----------------------------------------|---------
+Graph(DirectedWeightedGraph G) | constructor of new graph | |V|=n(nodes),|E|=e(edges) -->O(n*e)-->O(n^2) (1)
+Edge(int src ,int dest,double weight)| counstructor of new Edge |
+getSrc                               | The id of the source node of this edge. |
+getDest()                            | The id of the destination node of this edge |
+getWeight()                          | return the weight of this edge (positive value). |
+getInfo()                            | Returns the remark (meta data) associated with this edge. |
+setInfo(String s)                    | Allows changing the remark (meta data) associated with this edge. |
+getTag()                             | can be used be algorithms  |
+setTag(int t)                        | This method allows setting the "tag" value for temporal marking an edge - common |  <br/> 
+
+###Elaboration###
+- (1)
