@@ -13,23 +13,31 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class GUI extends JPanel {
     private  DirectedWeightedGraphAlgorithms graphalgo;
     private  DirectedWeightedGraph alg;
-    JButton removeButton=new JButton();
-    JButton addButton=new JButton();
+    private JButton removeButton=new JButton();
+    private JButton addButton=new JButton();
     private JSpinner spinner;
     private JSpinner X_spinner,y_spinner;
     private JMenuBar Menu = new JMenuBar();
     private JMenu file = new JMenu("File");
     private JMenu functions = new JMenu("functions");
     private JMenuItem Center= new JMenuItem("Center");
+    private JMenuItem shortestPathDist= new JMenuItem("shortestPathDist");
+    private JMenuItem Tsp= new JMenuItem("TSP");
+    private JMenuItem ShortPath= new JMenuItem("ShortPath");
     private JMenuItem LoadFile= new JMenuItem("Load File");
     private JMenuItem SaveFile=new JMenuItem("Save File");
     private SpinnerModel mode1,mode2,mode3;
     private int CenterKey=-1;
+    private List<NodeData> tsp_nodes=new LinkedList<>();
+    private List<NodeData> short_list=new LinkedList<>();
+
 
 
 
@@ -102,7 +110,14 @@ public class GUI extends JPanel {
         createSpinner();
         removeButton.addActionListener(e -> {
             int removeNode= Integer.parseInt(spinner.getValue().toString());
+            if(alg.removeNode(removeNode)==null){
+                JOptionPane.showMessageDialog(this,
+                        "This graph don't contain this node. \n enter diffrent node number.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
             alg.removeNode(removeNode);
+
 
         });
     }
@@ -128,7 +143,10 @@ public class GUI extends JPanel {
             double add_x= Double.parseDouble(X_spinner.getValue().toString());
             double add_y= Double.parseDouble(y_spinner.getValue().toString());
             alg.addNode(new Node(alg.nodeSize()+1,new geo_location(add_x,add_y,0.0)));
-
+            this.remove(spinner);
+            mode1 = new SpinnerNumberModel(0,0,alg.nodeSize(),1);
+            spinner=new JSpinner(mode1);
+            this.add(spinner);
         });
     }
 
@@ -156,16 +174,91 @@ public class GUI extends JPanel {
 
 
     }
-    private void functions(){
+    private void functions() {
         Menu.add(functions);
+        center();
+        ShortPath();
+        shortestPathDist();
+        TSP();
+    }
+        private void center(){
         functions.add(Center);
         Center.addActionListener(e -> {
-            if(graphalgo.center()==null)
+            if (graphalgo.center() == null)
                 JOptionPane.showMessageDialog(this, "Graph not connected. \n center function available only for connected graphs.", "Error", JOptionPane.ERROR_MESSAGE);
             else
-                CenterKey=graphalgo.center().getKey();
+                CenterKey = graphalgo.center().getKey();
+        });
+    }
+    private  void ShortPath(){
+        functions.add(ShortPath);
+        ShortPath.addActionListener(e -> {
+            int source=Integer.parseInt(JOptionPane.showInputDialog("insert source node"));
+            int destination=Integer.parseInt(JOptionPane.showInputDialog("insert destination node"));
+            if (graphalgo.getGraph().getNode(source)==null || graphalgo.getGraph().getNode(destination)==null)
+                JOptionPane.showMessageDialog(this,
+                        "This graph don't contain this node. \n enter diffrent node number.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            else
+                short_list=graphalgo.shortestPath(source,destination);
+            String nodesString = "";
+            for (int i=0;i<short_list.size();i++){
+                if (i==short_list.size()-1)
+                    nodesString+=short_list.get(i).getKey();
+                else
+                    nodesString+=short_list.get(i).getKey() + "--->";
+            }
+                JOptionPane.showMessageDialog(this,
+                        " \n" +nodesString ,
+                        "", JOptionPane.INFORMATION_MESSAGE);
+        });
+    }
+
+    private void shortestPathDist(){
+        functions.add(shortestPathDist);
+        shortestPathDist.addActionListener(e -> {
+            int source=Integer.parseInt(JOptionPane.showInputDialog("insert source node"));
+            int destination=Integer.parseInt(JOptionPane.showInputDialog("insert destination node"));
+            if(graphalgo.getGraph().getNode(source)==null || graphalgo.getGraph().getNode(destination)==null)
+                JOptionPane.showMessageDialog(this,
+                        "This graph don't contain this node. \n enter diffrent node number.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            else
+                short_list=graphalgo.shortestPath(source,destination);
+                JOptionPane.showMessageDialog(this
+                        , "The shortest path is:"+graphalgo.shortestPathDist(source,destination) +
+                        "\n ", "", JOptionPane.INFORMATION_MESSAGE);
+
         });
 
+    }
+    private void TSP(){
+        functions.add(Tsp);
+        Tsp.addActionListener(e -> {
+            String nodesString="";
+            nodesString=JOptionPane.showInputDialog("Enter the nodes you want to activate TSP on. \n please type ',' between every node");
+            String[] string_to_nodes=nodesString.split(",");
+            for (int i=0;i<string_to_nodes.length;i++){
+                NodeData curr_Node=graphalgo.getGraph().getNode (Integer.parseInt(string_to_nodes[i]));
+                if(curr_Node==null)
+                    JOptionPane.showMessageDialog(this,
+                            "This graph don't contain this node. \n enter diffrent node number.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                else
+                    tsp_nodes.add(curr_Node);
+            }
+            tsp_nodes=graphalgo.tsp(tsp_nodes);
+             nodesString="";
+            for (int i=0;i<tsp_nodes.size();i++){
+                if (i==tsp_nodes.size()-1)
+                    nodesString+=tsp_nodes.get(i).getKey();
+                else
+                    nodesString+=tsp_nodes.get(i).getKey() + "--->";
+            }
+            JOptionPane.showMessageDialog(this,
+                    "The best road to take is. \n" +nodesString ,
+                    "Tsp  Road", JOptionPane.INFORMATION_MESSAGE);
+        });
     }
     private String filechooser() {
         String userhome = System.getProperty("user.home");
