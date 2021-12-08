@@ -15,19 +15,34 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         private final Double INFINITY=Double.MAX_VALUE;
         private int lastsrc;
 
+        /**
+         * default constructor
+         */
         public GraphAlgo(){
                 this.graph=null;
         }
+
+        /**
+         * Inits the graph on which this set of algorithms operates on.
+         * @param g -  DirectedWeightedGraph that we deep copy from
+         */
         @Override
         public void init(DirectedWeightedGraph g) {
                 graph = g;
         }
 
+        /**
+         * Returns the underlying graph of which this class works.
+         * @return graph
+         */
         @Override
         public DirectedWeightedGraph getGraph() {
                 return graph;
         }
-
+        /**
+         * Computes a deep copy of this weighted graph.
+         * @return new deep copyed Graph
+         */
         @Override
         public DirectedWeightedGraph copy() {
                 return new Graph(this.graph);
@@ -46,21 +61,21 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 while(Nodes.hasNext())
                 {
                         int x=Nodes.next().getKey();
-                   BFS(x);
+                   BFS(x); //activate a bfs on each node in the graph
                    Iterator<NodeData> Is_connected=graph.nodeIter();
                    while(Is_connected.hasNext())
-                   {
+                   {    //if one node didnt reach a node he's tag will be -1
                        if (Is_connected.next().getTag()==-1) {
                            return false;
                                 }
                         }
-
+                        RestTags_Info();
                 }
                 return true;
         }
 
         /**
-         *         This function rest the tags of the nodes in the graph for the next BFS usage.
+         *This function rest the tags and the Info of the nodes in the graph for the next BFS usage.
          */
         private void RestTags_Info(){
                 Iterator<NodeData> Nodes=graph.nodeIter();
@@ -96,13 +111,27 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
         }
 
-
+        /**
+         * Computes the length of the shortest path between src to dest using dijkstra based function
+         * Note: if no such path --> returns -1
+         * @param src - start node
+         * @param dest - end (target) node
+         * @return shortest Path Distance
+         */
         @Override
         public double shortestPathDist(int src, int dest) {
                 return dijkstra(src, dest,1);
                         }
 
-
+        /**
+         * Computes the the shortest path between src to dest - as an ordered List of nodes:
+         * using dijkstra based function, if the src reach the dest the dest save at the tag of each node the id of the closest node to him according to the dijkstra
+         *This function from the dest to the src according to the id saved in the tags.         * src--> n1-->n2-->...dest
+         * Note if no such path --> returns null;
+         * @param src - start node
+         * @param dest - end (target) node
+         * @return List of the nodes from src to dest src--> n1-->n2-->...dest
+         */
         @Override
         public List<NodeData> shortestPath(int src, int dest) {
                 dijkstra(src,dest,0);
@@ -127,7 +156,13 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
                 else return null;
         }
-
+        /**
+         * Finds the NodeData which minimizes the max distance to all the other nodes.
+         * Assuming the graph isConnected, elese return null.
+         * the function create a arr with the node size go over all the nodes(using shortestPathDist) and insert the max distance that each node has to travel in the graph
+         * then it run over the arr and select the node with the minimizes the max distance
+         * @return the Node data to which the max shortest path to all the other nodes is minimized.
+         */
         @Override
         public NodeData center() {
                 if (!isConnected())return null;
@@ -157,10 +192,17 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 return graph.getNode(select);
         }
 
+        /**
+         * Create a List of all permutations that received from the citis list.
+         * O(n!) n is the number of nodes on cities.
+         * @param cities -Nodes list
+         * @param index - curr index
+         * @param all_permutation - list of all permutation
+         */
         private void createpermute(List<NodeData> cities,int index,List<List<NodeData>> all_permutation){
                 for (int i = index; i < cities.size(); i++) {
-                        Collections.swap(cities, i, index);
-                        createpermute(cities, index + 1, all_permutation);
+                        Collections.swap(cities, i, index); //swap between 2 indexes
+                        createpermute(cities, index + 1, all_permutation); //recursion index advance by 1
                         Collections.swap(cities, index, i);
                         if (index == cities.size() - 1) {
                                 all_permutation.add(new ArrayList<>(cities));
@@ -168,6 +210,13 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
 
         }
+
+        /**
+         * receive a list of nodes in the graph.
+         * O(n*n!)
+         * @param cities - list of nodes received from the user
+         * @return  a list of nodes sorted in the best way to travel over all the nodes with the lowest weight cost.
+         */
         @Override
         public List<NodeData> tsp(List<NodeData> cities) {
                 List<List<NodeData>> all_permutation=new LinkedList<>();
@@ -188,6 +237,12 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 return all_permutation.get(per_num);
         }
 
+        /**
+         * Saves this weighted (directed) graph to the given
+         * file name - in JSON format
+         * @param file - the file name (may include a relative path).
+         * @return true - iff the file was successfully saved
+         */
         @Override
         public boolean save(String file) {
                 try {
@@ -227,6 +282,14 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 return true;
         }
 
+        /**
+         * This method loads a graph to this graph algorithm.
+         * if the file was successfully loaded - the underlying graph
+         * of this class will be changed (to the loaded one), in case the
+         * graph was not loaded the original graph should remain "as is".
+         * @param file - file name of JSON file
+         * @return true - iff the graph was successfully loaded.
+         */
         @Override
         public boolean load(String file) {
                 Gson gson = new GsonBuilder()
@@ -242,7 +305,21 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
         }
 
-
+        /**
+         * dijkstra based algorithm that receive a src and dest.
+         * min_dist_from HashMap of the src is a HashMap that every node in the graph has and it includes the minimum weight distance calculated by this function for each node in the graph.
+         * first in check in the min_dist_from HashMap of the src if a distance to the dest from the src node is already been calculated.
+         * if not it start at the src node and go over each node and check in the min_dist_from HashMap of the src:
+         * if the weight calculated to the current node + the weight of the edge weight less then the destination node value in min_dist_from HashMap of the src,
+         * it changes the value to the new weight calculated.
+         * @param src-Source node id
+         * @param dest-destination node id
+         * @param type-0: which used for shortestPath function for setting the tags that the fuction uses.
+         *             1: for ShortestPathDist that check the HashMap of the src if the distance to the destination is already been calculated
+         *
+         * @return shortest path from the src node to the dest node.
+         * if there's no path the function return -1.
+         */
         private double dijkstra(int src , int dest,int type){
                 if (graph.getNode(src)==null||graph.getNode(dest)==null)
                         throw new RuntimeException("one of the nodes dosent exist");
@@ -280,11 +357,5 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                         return -1;
                 return srcNode.getfrom_min(dest);
         }
-        private double ArraySum(double[] shortestPath){
-                double sum=0;
-                for (double v : shortestPath)
-                        if (v != INFINITY)
-                                sum += v;
-                return sum;
-        }
+
  }
