@@ -153,7 +153,7 @@ shortPath        | Computes the the shortest path between src to dest .
 shortestPathDist | Computes the length of the shortest path between src to dest
 TSP              | Computes a list of consecutive nodes which go over all the nodes in cities.  <br/>
  <br/>
- **GUI represent G1.json ** <br/>
+ ## GUI represent G1.json  <br/>
  <img src="https://user-images.githubusercontent.com/93033782/145280460-92df3f39-dcad-46f2-9058-e184f4ea7451.png" width="800">
  ## File
 In top of the panel there are a buttons of load/save in File button functions .<br/>
