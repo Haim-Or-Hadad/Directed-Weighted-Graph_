@@ -12,7 +12,7 @@ import java.util.*;
 
 public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
         DirectedWeightedGraph graph;
-        private final Double INFINITY=Double.POSITIVE_INFINITY;
+        private final Double INFINITY=Double.MAX_VALUE;
         private int lastsrc;
 
         public GraphAlgo(){
@@ -110,6 +110,8 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 if(graph.getNode(dest)!=null) {
                         NodeData currNode = graph.getNode(dest);
                         while (currNode.getKey() != src) {
+                                if (currNode.getKey()==-1)
+                                        return null;
                                 path.add(currNode);
                                 int prev = currNode.getTag();
                                 currNode = graph.getNode(prev);
@@ -240,37 +242,6 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
                 }
         }
 
-//        private double[] dijkstra(int src , int dest){
-//                        RestTags_Info();
-//                        //PriorityQueue<NodeData> nodesQ=new PriorityQueue<>(Comparator.comparingDouble(NodeData::getWeight));
-//
-//                        double[] shortestPath = new double[graph.nodeSize()+1];
-//                        initialTomax(shortestPath);
-//                        shortestPath[src] = 0;
-//                        Queue<NodeData>nodesQ= new LinkedList<>();
-//                        nodesQ.add(graph.getNode(src));
-//                        // runIterator(src,nodes);
-//                        while(!nodesQ.isEmpty()) {
-//                                NodeData curr_node=nodesQ.poll();
-//                                curr_node.setInfo("Black");
-//                                double saveLastShortPath=(shortestPath[curr_node.getKey()]);
-//                                Iterator<EdgeData> edges=graph.edgeIter(curr_node.getKey());
-//                                while(edges.hasNext()) {
-//                                        EdgeData curr_edge=this.graph.getEdge(curr_node.getKey(),edges.next().getDest());
-//                                        if ((curr_edge.getWeight()+shortestPath[curr_node.getKey()] <= shortestPath[curr_edge.getDest()]))
-//                                        {
-//                                                NodeData temp=graph.getNode(curr_edge.getDest());
-//                                                shortestPath[curr_edge.getDest()]=(curr_edge.getWeight())+saveLastShortPath;
-//                                                temp.setTag(curr_edge.getSrc());
-//                                        }
-//                                        NodeData temp=graph.getNode(curr_edge.getDest());
-//                                        if (Objects.equals(temp.getInfo(), "White"))
-//                                                nodesQ.add(temp);
-//
-//                                }
-//                        }
-//                        return shortestPath;
-//        }
 
         private double dijkstra(int src , int dest,int type){
                 if (graph.getNode(src)==null||graph.getNode(dest)==null)
@@ -305,7 +276,8 @@ public class GraphAlgo implements DirectedWeightedGraphAlgorithms {
 
                         }
                 }
-
+                if (Objects.equals(srcNode.getfrom_min(dest), INFINITY))
+                        return -1;
                 return srcNode.getfrom_min(dest);
         }
         private double ArraySum(double[] shortestPath){

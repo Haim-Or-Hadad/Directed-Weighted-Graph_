@@ -64,6 +64,6 @@ public class Ex2 {
     }
 
     public static void main(String[] args) {
-        runGUI("data/1000Nodes.json");
+        runGUI("data/G2.json");
     }
 }

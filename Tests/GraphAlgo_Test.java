@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class GraphAlgo_Test {
+    private final Double INFINITY=Double.MAX_VALUE;
     private static DirectedWeightedGraph graph = new Graph();
     private static DirectedWeightedGraphAlgorithms graphalgo = new GraphAlgo();
 
@@ -88,7 +89,7 @@ class GraphAlgo_Test {
         TestGraphAlgo.init(TestGraph);
         TestGraphAlgo.shortestPathDist(2, 5);
         dist = TestGraphAlgo.shortestPathDist(2, 5);
-        assertEquals(Double.MAX_VALUE, dist);
+        assertEquals(INFINITY, dist);
 
         assertThrows(RuntimeException.class, () -> graphalgo.shortestPathDist(2, 10));
     }
