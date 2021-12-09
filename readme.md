@@ -12,7 +12,7 @@ In addition the project includes a GUI interface that draws graph on the screen 
 ## UML
 UML is a general-purpose, developmental, modeling language in the field of software<br/>
 engineering that is intended to provide a standard way to visualize the design of a system.<br/>
-In this UML we are planning how the project will look like , and 
+In this UML we are planning how the project will look like. 
 <img src="https://user-images.githubusercontent.com/93033782/145278744-43371902-53c7-4800-93b2-0d3957f1fc0d.jpeg" width="600">
 
 
@@ -37,8 +37,8 @@ distance      | get GeoLocation and calculate the distance from this.geo_locatio
 
 **significance: A Node class will use it**
 ### Node
-Node this class that implements the NodeData interface , This interface represents the set of operations applicable on a <br/>
- node (vertex) in a (directional) weighted graph.
+Node this class that implements the NodeData interface , This interface represents  set of operations applicable on a <br/>
+ node (vertex) in a (directional) weighted graph.<br/>
  ***new fields:***
 - private int id - the key that will be useful for the structure of graph.
 - private double weight- the weight of the node for the algoritem.
@@ -49,8 +49,9 @@ Node this class that implements the NodeData interface , This interface represen
  Methods       | Performs
 --------------------------|-----------------------------------------
 Node(int id , GeoLocation coord)| counstructor of new Node.
-get_min_dist_size()       |-----------------
-min_update                |-----------------
+remove_dist(int dest)       | delete the distination from Specific hashmap of node
+getfrom_min             | return the last destination between the node to key
+min_update                |update the new minimal weight to specific node
 getKey()                  | Returns the key (id) associated with this node.
 getLocation()             | Returns the location of this node, if none return null.
 setLocation(GeoLocation p)| new location  (position) of this node.
@@ -174,5 +175,16 @@ Example of shortest path between node 15 to node 6. <br/>
  Click on TSP open to you this message dialog ,  enter all the nodes with comma between them : <br/>
  <img src="https://user-images.githubusercontent.com/93033782/145285115-8f0831d0-edac-4141-9ece-02beda89947a.png" width="300" <br/>
 
+
+## Performes of largh graphs:
+ 
+   Graph       | isConnected | shortestPath | shortestPathDist | tsp 
+-----------------|-----------|------------------------|---------------|---------------------
+1000Nodes        | 87ms      | (src=55,dest=721) 39ms | (55,721) 38ms |list=(7,27,734,888,576) 57ms  
+10000Nodes       | ---------|(src=55,dest=5000) 1 sec 17ms |(55,5000) 1 sec 27 ms | list=(7,1000,3301,7555,9999) 2 sec
+100000Nodes        | ---------|(src=55,dest=5000) 22 sec 1 ms|27 sec 28 ms | list=(76,1060,33601,75565,99998) 2 minutes   
+ 
+  <br/>
+ 
 
 
