@@ -103,7 +103,7 @@ public class Graph implements DirectedWeightedGraph {
     }
 
     /**
-     * This method returns an Iterator for the
+     * This method returns an Iterator for the nodes hashmap
      * collection representing all the nodes in the graph.
      * @return Iterator<node_data>
      */

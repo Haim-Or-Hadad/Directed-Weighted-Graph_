@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,6 @@ public class GUI extends JPanel {
     private JButton removeButton=new JButton();
     private JButton addButton=new JButton();
     private JSpinner spinner;
-    private JSpinner X_spinner,y_spinner;
     private JMenuBar Menu = new JMenuBar();
     private JMenu file = new JMenu("File");
     private JMenu functions = new JMenu("Functions");
@@ -28,7 +28,7 @@ public class GUI extends JPanel {
     private JMenuItem ShortPath= new JMenuItem("ShortPath");
     private JMenuItem LoadFile= new JMenuItem("Load File");
     private JMenuItem SaveFile=new JMenuItem("Save File");
-    private SpinnerModel mode1,mode2,mode3;
+    private SpinnerModel mode1;
     private int CenterKey=-1;
     private List<NodeData> tsp_nodes=new LinkedList<>();
     private List<NodeData> short_list=new LinkedList<>();
@@ -67,7 +67,7 @@ public class GUI extends JPanel {
         while (Nodes.hasNext()){  //go on all the nodes
             NodeData tempN=Nodes.next();
             GeoLocation cord=tempN.getLocation(); //get the nodes locations
-           double factor_x = getWidth()/(maxX-minX)*0.9; //factor for the X coordinates scale.
+            double factor_x = getWidth()/(maxX-minX)*0.9; //factor for the X coordinates scale.
             double factory= getHeight()/(maxY-minY)*0.9; //factor for the Y coordinates scale.
             Iterator<EdgeData> Edges = alg.edgeIter(tempN.getKey());
             while (Edges.hasNext()) {
@@ -135,24 +135,7 @@ public class GUI extends JPanel {
     }
 
     /**
-     * Create 2 Jspinners to select the desired X and Y.
-     * The values available in the Jspinners are calculated according to the min and max values of X and Y coordinates
-     */
-    private void createSpinner1_2() {
-        mode2 = new SpinnerNumberModel(findMinX(), findMinX(),findMaxX(), 0.001);
-        X_spinner = new JSpinner(mode2);
-        X_spinner.setBounds(0, 100, 100, 100);
-        double miny=findMiny();
-        double maxy=findMaxy();
-        mode3 = new SpinnerNumberModel(32.10101,32.10101,32.10781, 0.001);
-        y_spinner = new JSpinner(mode3);
-        y_spinner.setBounds(0, 100, 100, 100);
-        this.add(X_spinner);
-        this.add(y_spinner);
-    }
-
-    /**
-     * Creation of the Add button that create the nodes according to the values selected in the 2 spinners above.
+     * Creation of the Add button that create the nodes according to the values selected by the user.
      */
 
     private void createAddButton(){
@@ -160,15 +143,29 @@ public class GUI extends JPanel {
         addButton.setSize(100,50);
         addButton.setText("Add Node");
         this.add(addButton);
-        createSpinner1_2();
         addButton.addActionListener(e -> {
-            double add_x= Double.parseDouble(X_spinner.getValue().toString());
-            double add_y= Double.parseDouble(y_spinner.getValue().toString());
-            alg.addNode(new Node(alg.nodeSize()+1,new geo_location(add_x,add_y,0.0)));
-            this.remove(spinner);
-            mode1 = new SpinnerNumberModel(0,0,alg.nodeSize(),1);
-            spinner=new JSpinner(mode1);
-            this.add(spinner);
+            double min_x=findMinX();
+            double max_x=findMaxX();
+            double min_y=findMiny();
+            double max_y=findMaxy();
+            min_x = Double.parseDouble(new DecimalFormat("##.####").format(min_x));
+            max_x = Double.parseDouble(new DecimalFormat("##.####").format(max_x));
+            min_y = Double.parseDouble(new DecimalFormat("##.####").format(min_y));
+            max_y = Double.parseDouble(new DecimalFormat("##.####").format(max_y));
+            String x=JOptionPane.showInputDialog("Enter x value for the node: \n The recommended values are between:"+min_x+"-"+max_x);
+            String y=JOptionPane.showInputDialog("Enter y value for the node: \n The recommended values are between:"+min_y+"-"+max_y);
+            if(x.isEmpty() || y.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Try again failed to create node with the values", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                double add_x = Double.parseDouble(x);
+                double add_y = Double.parseDouble(y);
+                alg.addNode(new Node(alg.nodeSize() + 1, new geo_location(add_x, add_y, 0.0)));
+                this.remove(spinner);
+                mode1 = new SpinnerNumberModel(0, 0, alg.nodeSize(), 1);
+                spinner = new JSpinner(mode1);
+                this.add(spinner);
+            }
         });
     }
 
@@ -195,7 +192,7 @@ public class GUI extends JPanel {
                     alg = graphalgo.getGraph();
                 }
             }
-             });
+        });
         SaveFile.addActionListener(e -> {
             String filename=JOptionPane.showInputDialog("Save as:");
             graphalgo.save(filename);
@@ -251,9 +248,9 @@ public class GUI extends JPanel {
                 else
                     nodesString.append(short_list.get(i).getKey()).append("--->");
             }
-                JOptionPane.showMessageDialog(this,
-                        " \n" +nodesString ,
-                        "", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    " \n" +nodesString ,
+                    "", JOptionPane.INFORMATION_MESSAGE);
         });
     }
 
@@ -299,7 +296,7 @@ public class GUI extends JPanel {
                     tsp_nodes.add(curr_Node);
             }
             tsp_nodes=graphalgo.tsp(tsp_nodes);
-             nodesString = new StringBuilder();
+            nodesString = new StringBuilder();
             for (int i=0;i<tsp_nodes.size();i++){
                 if (i==tsp_nodes.size()-1)
                     nodesString.append(tsp_nodes.get(i).getKey());
@@ -326,7 +323,7 @@ public class GUI extends JPanel {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-             path = selectedFile.getAbsolutePath();
+            path = selectedFile.getAbsolutePath();
         }
         else if(JFileChooser.CANCEL_OPTION == result)
             return null;

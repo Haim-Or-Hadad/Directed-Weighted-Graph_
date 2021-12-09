@@ -2,8 +2,6 @@ import api.GUI;
 import api.*;
 
 import javax.swing.*;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
