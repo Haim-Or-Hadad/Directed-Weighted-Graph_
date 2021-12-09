@@ -9,8 +9,15 @@ public class Node implements NodeData {
         private  double weight=0;
         private  String Info;
         private  int Tag;
+        //each node get a Hashmap includes the minimum distance from him to the other nodes.
+        //The key of the other nodes is the way to enter the value of the distance from currnode to him.
         private HashMap<Integer, Double> min_dist_from;
 
+        /**
+         * Node constructor
+         * @param id the id of the new node
+         * @param coord the coordinates of the new node
+         */
         public Node(int id , GeoLocation coord){
                 this.id=id;
                 this.coordinates=coord;
@@ -19,14 +26,16 @@ public class Node implements NodeData {
                 min_dist_from=new HashMap<>();
         }
 
-        public int get_min_dist_size(){
-                return min_dist_from.size();
-        }
+        /**
+         * Remove a distance of the node value of the dest node from the Hashmap.
+         * @param dest-node key for entering the correct value in the Hashmap
+         */
         public void remove_dist(int dest){
-                if(min_dist_from.containsKey(dest)) {
                         min_dist_from.remove(dest);
-                }
+
         }
+
+
         public Double getfrom_min(int key){
                 if (min_dist_from.containsKey(key)){
                         return min_dist_from.get(key);

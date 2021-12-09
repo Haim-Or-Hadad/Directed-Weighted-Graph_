@@ -5,6 +5,15 @@ import java.lang.reflect.Type;
 
 public class JsonToGraph implements JsonDeserializer<DirectedWeightedGraph> {
 
+    /**
+     * This class is a gson deserialize class
+     * that recieve a json file and create a Directed Weighted Graph from him.
+     * @param jsonElement-
+     * @param type-
+     * @param jsonDeserializationContext-
+     * @return Directed Weighted Graph
+     * @throws JsonParseException-
+     */
     @Override
     public DirectedWeightedGraph deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject jsonfile = jsonElement.getAsJsonObject();
