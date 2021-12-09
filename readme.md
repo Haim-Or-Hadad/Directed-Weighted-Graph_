@@ -12,7 +12,7 @@ In addition the project includes a GUI interface that draws graph on the screen 
 ## UML
 UML is a general-purpose, developmental, modeling language in the field of software<br/>
 engineering that is intended to provide a standard way to visualize the design of a system.<br/>
-In this UML we are planning how the project will look like , and 
+In this UML we are planning how the project will look like. 
 <img src="https://user-images.githubusercontent.com/93033782/145278744-43371902-53c7-4800-93b2-0d3957f1fc0d.jpeg" width="600">
 
 
@@ -32,33 +32,34 @@ x             | returns the value of x
 y             | returns the value of y
 z             | returns the value of z
 geo_location  | constructor that get x,y,z and build geo_location
-geo_location  | constructor that get GeoLocation and build new geo_location
+geo_location  | deep copy constructor that get a GeoLocation and build new geo_location
 distance      | get GeoLocation and calculate the distance from this.geo_location <br/>
 
 **significance: A Node class will use it**
 ### Node
-Node this class that implements the NodeData interface , This interface represents the set of operations applicable on a <br/>
- node (vertex) in a (directional) weighted graph.
+Node this class that implements the NodeData interface , This interface represents  set of operations applicable on a <br/>
+ node (vertex) in a (directional) weighted graph.<br/>
  ***new fields:***
 - private int id - the key that will be useful for the structure of graph.
 - private double weight- the weight of the node for the algoritem.
 - private String Info.
-- private int Tag- useful for the algoritems.
-- private HashMap<Integer,Double> min_dist_from-the minimun distance from any ather vertex(algoritem). <br/>
+- private int Tag- useful for the algorithms.
+- private HashMap<Integer,Double> min_dist_from-save the the minimun distance(according to weight) from this node to any other node in the graph(algorithm). <br/>
 
  Methods       | Performs
 --------------------------|-----------------------------------------
-Node(int id , GeoLocation coord)| counstructor of new Node.
-get_min_dist_size()       |-----------------
-min_update                |-----------------
+Node(int id , GeoLocation coord)| counstructor of a new Node.
+remove_dist(int dest)     | delete the destination saved in the min_dist_from in the key "dest".
+getfrom_min(int key)      | return the last destination between this node to key node.
+min_update                | update the new minimal weight to specific node.
 getKey()                  | Returns the key (id) associated with this node.
 getLocation()             | Returns the location of this node, if none return null.
-setLocation(GeoLocation p)| new location  (position) of this node.
+setLocation(GeoLocation p)| set a new location (position) of this node.
 getWeight()               | Returns the weight associated with this node.
-setWeight(double w)       | the new weight
+setWeight(double w)       | set a new weight
 getInfo()                 | Returns the remark (meta data) associated with this node.
 setInfo(String s)         | Allows changing the remark (meta data) associated with this node.
-getTag()                  | Temporal data (aka color: e,g, white, gray, black) - for algoritems.
+getTag()                  | Temporal data (aka color: e,g, white, gray, black) - for algorithms.
 setTag(int t)             | new value of the tag  <br/>
 
 **significance: This class represents a point in space and is useful for all classes and algorithms in the project**
@@ -69,13 +70,13 @@ directional edge(src,dest) in a (directional) weighted graph. <br/>
 - private int src- the source of the edge.
 - private int dest - the destination of the edge.
 - private double weight- the weight of the edge.
-- private int Tag- tag for algoritems.
+- private int Tag- tag for algorithms.
 - private String Info <br/>
 
  Methods       | Performs
 --------------------------|-----------------------------------------
 Edge(int src ,int dest,double weight)| counstructor of new Edge
-getSrc                               | The id of the source node of this edge.
+getSrc()                             | The id of the source node of this edge.
 getDest()                            | The id of the destination node of this edge
 getWeight()                          | return the weight of this edge (positive value).
 getInfo()                            | Returns the remark (meta data) associated with this edge.
@@ -90,8 +91,8 @@ The class implement the interface **Directed Weighted Graph**, This interface re
 The interface has a road-system or communication network in mind - and should support a large number of nodes . our implemention <br/>
 based on an hashmapes and this an efficient compact representation. <br/>
 ***New Fields*** <br/>
-- private HashMap<Integer, NodeData> nodes - data structures that save the nodes , key 1 is node 1.
-- private HashMap<Integer, HashMap<Integer, EdgeData>> edges - data structure that save for any node is edges .
+- private HashMap<Integer, NodeData> nodes - data structures that save the nodes , key 1 is node 1 and so...
+- private HashMap<Integer, HashMap<Integer, EdgeData>> edges - data structure that save for any node is edges. first key is the source node id for the endge and the second key is the destination node id.
 - private int numOfNodes - num of the nodes in the graph.
 - private int numOfEdges - num of the edge in the graph.
 - private int MC - changes in the graph . </br>
@@ -100,25 +101,28 @@ based on an hashmapes and this an efficient compact representation. <br/>
 
  Methods       | Performs | Complexity
 --------------------------|-----------------------------------------|---------
-Graph(DirectedWeightedGraph G) | constructor of new graph | |V|=n(nodes),|E|=e(edges) -->O(n*e)-->O(n^2) (1)
-Edge(int src ,int dest,double weight)| counstructor of new Edge |
-getSrc                               | The id of the source node of this edge. |
-getDest()                            | The id of the destination node of this edge |
-getWeight()                          | return the weight of this edge (positive value). |
-getInfo()                            | Returns the remark (meta data) associated with this edge. |
-setInfo(String s)                    | Allows changing the remark (meta data) associated with this edge. |
-getTag()                             | can be used be algorithms  |
-setTag(int t)                        | This method allows setting the "tag" value for temporal marking an edge - common |  <br/> 
+Graph() | default constructor | O(1)
+Graph(DirectedWeightedGraph G) | Deep copy constructor of a new graph |(1)O(n+e)
+getNode(int key)               | Returns the node_data by the node_id(key). |(2) O(1)
+getEdge(int src, int dest)     | Returns the data of the edge (src,dest). | (3) O(1)
+addNode(NodeData n)            | Adds a new node to the graph with the given node_data. |(4) O(1)
+connect(int src, int dest, double w)  | Return the weight of this edge (positive value). |(5) O(1)
+nodeIter()                            |This method returns an Iterator for the nodes hashmap |
+edgeIter()                    | This method returns an Iterator for all the edges in this graph. |
+edgeIter(int node_id)         | This method returns an Iterator for edges getting out of the given node |
+removeNode(int key)           |  Deletes the node (with the given ID) from the graph | (6) O(k), V.degree=k
+removeEdge(int src, int dest) |  Deletes the edge from the graph |(7) O(1)
+nodeSize() |  Returns the number of vertices (nodes) in the graph. | O(1)
+edgeSize() |  Returns the number of edges (assume directional graph). | O(1)
+getMC() |  Returns the Mode Count - for testing changes in the graph. | O(1)
+
+<br/> 
 
 ###Elaboration###
-- (1)
-- (2)
-- (3)
-- (4)
-- (5)
-- (6)
-- (7)
-- (8)
+- (1)The function go over all the node(n) and after that go over all the edges(e) O(n+e).
+- (2)(3)(5)Getting a value from a hashmap by key is O(1) complexity
+- (4)(7)Adding/deleting a value to a Hashmap using the id recieved from the Node is O(1) complexity.
+- (6)deleteing the node from the nodes hashmap and then going over the other nodes and check if the hashmap contain "key" value if so delete that Edge as well.
 
 ### GraphAlgo
 GraphAlgo is class that run algorithms on the graph. the class implement the interface **Directed Weighted Graph**.<br/>
@@ -174,5 +178,16 @@ Example of shortest path between node 15 to node 6. <br/>
  Click on TSP open to you this message dialog ,  enter all the nodes with comma between them : <br/>
  <img src="https://user-images.githubusercontent.com/93033782/145285115-8f0831d0-edac-4141-9ece-02beda89947a.png" width="300" <br/>
 
+
+## Performes of largh graphs:
+ 
+   Graph       | isConnected | shortestPath | shortestPathDist | tsp 
+-----------------|-----------|------------------------|---------------|---------------------
+1000Nodes        | 87ms      | (src=55,dest=721) 39ms | (55,721) 38ms |list=(7,27,734,888,576) 57ms  
+10000Nodes       | ---------|(src=55,dest=5000) 1 sec 17ms |(55,5000) 1 sec 27 ms | list=(7,1000,3301,7555,9999) 2 sec
+100000Nodes        | ---------|(src=55,dest=5000) 22 sec 1 ms|27 sec 28 ms | list=(76,1060,33601,75565,99998) 2 minutes   
+ 
+  <br/>
+ 
 
 
