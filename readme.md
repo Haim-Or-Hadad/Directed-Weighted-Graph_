@@ -102,7 +102,7 @@ based on an hashmapes and this an efficient compact representation. <br/>
  Methods       | Performs | Complexity
 --------------------------|-----------------------------------------|---------
 Graph() | default constructor | O(1)
-Graph(DirectedWeightedGraph G) | Deep copy constructor of a new graph |(1) V|=n(nodes),|E|=e(edges) -->O(n+e)-->O(n)
+Graph(DirectedWeightedGraph G) | Deep copy constructor of a new graph |(1)O(n+e)
 getNode(int key)               | Returns the node_data by the node_id(key). |(2) O(1)
 getEdge(int src, int dest)     | Returns the data of the edge (src,dest). | (3) O(1)
 addNode(NodeData n)            | Adds a new node to the graph with the given node_data. |(4) O(1)
