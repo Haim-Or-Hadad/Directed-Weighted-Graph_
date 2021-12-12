@@ -118,7 +118,7 @@ getMC() |  Returns the Mode Count - for testing changes in the graph. | O(1)
 
 <br/> 
 
-###Elaboration###
+### Elaboration###
 - (1)The function go over all the node(n) and after that go over all the edges(e) O(n+e).
 - (2)(3)(5)Getting a value from a hashmap by key is O(1) complexity
 - (4)(7)Adding/deleting a value to a Hashmap using the id recieved from the Node is O(1) complexity.
@@ -130,15 +130,16 @@ This interface represents a Directed (positive) Weighted Graph Theory Algorithms
  
  Methods       | Performs | Complexity
 --------------------------|-----------------------------------------|---------
-init(DirectedWeightedGraph g) | Inits the graph on which this set of algorithms operates on | 
-DirectedWeightedGraph getGraph()|  Returns the underlying graph of which this class works |
-DirectedWeightedGraph copy()                               | Computes a deep copy of this weighted graph |
-isConnected()                            | Returns true if and only if (iff) there is a valid path from each node to each other node. |
-shortestPathDist(int src, int dest)                         | Computes the length of the shortest path between src to dest |
-shortestPath(int src, int dest)                            | Computes the the shortest path between src to dest |
-center()                    | Finds the NodeData which minimizes the max distance to all the other nodes. |
-tsp(List<NodeData> cities)                             | Computes a list of consecutive nodes which go over all the nodes in cities.  |
-save(String file)                        | Saves this weighted (directed) graph to the given |  <br/>
+init(DirectedWeightedGraph g) | Inits the graph on which this set of algorithms operates on |  O(1)
+DirectedWeightedGraph getGraph()|  Returns the underlying graph of which this class works |   O(1)
+DirectedWeightedGraph copy()                               | Computes a deep copy of this weighted graph |  O(N+E)
+isConnected()                            | Returns true if and only if (iff) there is a valid path from each node to each other node. |  O(E*N^2)
+shortestPathDist(int src, int dest)                         | Computes the length of the shortest path between src to dest | O(E*N)
+shortestPath(int src, int dest)                            | Computes the the shortest path between src to dest | O(E*N)
+center()                    | Finds the NodeData which minimizes the max distance to all the other nodes. | O(N^2*E) 
+tsp(List<NodeData> cities)                             | Computes a list of consecutive nodes which go over all the nodes in cities.  | O(N!)
+load(String file)                        | This method loads a graph to this graph algorithm. |  O(N+E)  <br/>
+save(String file)                        | Saves this weighted (directed) graph to the given | O(N+E)  <br/>
  
  
  ## GUI
@@ -184,8 +185,8 @@ Example of shortest path between node 15 to node 6. <br/>
    Graph       | isConnected | shortestPath | shortestPathDist | tsp 
 -----------------|-----------|------------------------|---------------|---------------------
 1000Nodes        | 87ms      | (src=55,dest=721) 39ms | (55,721) 38ms |list=(7,27,734,888,576) 57ms  
-10000Nodes       | ---------|(src=55,dest=5000) 1 sec 17ms |(55,5000) 1 sec 27 ms | list=(7,1000,3301,7555,9999) 2 sec
-100000Nodes        | ---------|(src=55,dest=5000) 22 sec 1 ms|27 sec 28 ms | list=(76,1060,33601,75565,99998) 2 minutes   
+10000Nodes       | 1 minute|(src=55,dest=5000) 52ms |(55,5000) 1 sec 27 ms | list=(7,1000,3301,7555,9999) 1 sec
+100000Nodes       | ---------|(src=55,dest=5000) 17 sec|16 sec 92 ms | list=(76,1060,33601,75565,99998) 1 minute 10 ms   
  
   <br/>
  
