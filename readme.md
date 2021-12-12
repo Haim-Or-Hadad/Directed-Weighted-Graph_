@@ -182,11 +182,11 @@ Example of shortest path between node 15 to node 6. <br/>
 
 ## Performes of largh graphs:
  
-   Graph       | isConnected | shortestPath | shortestPathDist | tsp 
+   Graph       | isConnected | shortestPath | shortestPathDist | tsp | center
 -----------------|-----------|------------------------|---------------|---------------------
-1000Nodes        | 87ms      | (src=55,dest=721) 39ms | (55,721) 38ms |list=(7,27,734,888,576) 57ms  
-10000Nodes       | 1 minute|(src=55,dest=5000) 52ms |(55,5000) 1 sec 27 ms | list=(7,1000,3301,7555,9999) 1 sec
-100000Nodes       | ---------|(src=55,dest=5000) 17 sec|16 sec 92 ms | list=(76,1060,33601,75565,99998) 1 minute 10 ms   
+1000Nodes        | 87ms      | (src=55,dest=721) 39ms | (55,721) 38ms |list=(7,27,734,888,576) 57ms  | 7 sec 50 ms 
+10000Nodes       | 1 minute|(src=55,dest=5000) 52ms |(55,5000) 1 sec 27 ms | list=(7,1000,3301,7555,9999) 1 sec | heap
+100000Nodes       | heap |(src=55,dest=5000) 17 sec|16 sec 92 ms | list=(76,1060,33601,75565,99998) 1 minute 10 ms | heap   
  
   <br/>
  
