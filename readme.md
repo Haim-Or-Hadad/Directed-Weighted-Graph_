@@ -118,7 +118,7 @@ getMC() |  Returns the Mode Count - for testing changes in the graph. | O(1)
 
 <br/> 
 
-### Elaboration###
+### Elaboration
 - (1)The function go over all the node(n) and after that go over all the edges(e) O(n+e).
 - (2)(3)(5)Getting a value from a hashmap by key is O(1) complexity
 - (4)(7)Adding/deleting a value to a Hashmap using the id recieved from the Node is O(1) complexity.
