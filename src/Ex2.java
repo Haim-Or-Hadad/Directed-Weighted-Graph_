@@ -35,36 +35,22 @@ public class Ex2 {
      */
     public static void runGUI(String json_file) {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
-//        alg.getGraph().removeEdge(1,0);// tests for isconnected
-//        //alg.getGraph().removeEdge(16,0);
-//        alg.getGraph().removeEdge(0,1);
-//        alg.getGraph().removeEdge(0,16);
         GUI gui = new GUI(alg);
         JFrame jf = new JFrame();
         jf.setTitle("Graph");
-        //jf.setPreferredSize(new Dimension(20, 22));
         jf.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        List<NodeData> cities= new LinkedList<>();
-//        cities.add(alg.getGraph().getNode(7));
-//        cities.add(alg.getGraph().getNode(27));
-//        cities.add(alg.getGraph().getNode(12));
-//        cities.add(alg.getGraph().getNode(8));
-//        cities.add(alg.getGraph().getNode(20));
-//        cities.add(alg.getGraph().getNode(1));
-//        cities.add(alg.getGraph().getNode(0));
-//        cities=alg.tsp(cities);
-        //alg.getGraph().removeNode(4);
-//        System.out.println(alg.isConnected());
-        //List<NodeData> als=alg.shortestPath(0,12);
-        //List<NodeData> als=alg.shortestPath(16,2);
-       // System.out.println(alg.center().getKey());
-        //alg.getGraph().removeNode(4);
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.add(gui);
     }
 
+
     public static void main(String[] args) {
-        runGUI("data/G2.json");
+
+        long startTime = System.currentTimeMillis();
+        runGUI(args[0]);
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println(totalTime/1000F);
     }
 }

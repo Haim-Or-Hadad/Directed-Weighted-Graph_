@@ -18,6 +18,8 @@ public class GUI extends JPanel {
     private  DirectedWeightedGraph alg;
     private JButton removeButton=new JButton();
     private JButton addButton=new JButton();
+    private JButton addedgeButton=new JButton();
+    private JButton removedgeButton=new JButton();
     private JSpinner spinner;
     private JMenuBar Menu = new JMenuBar();
     private JMenu file = new JMenu("File");
@@ -42,8 +44,12 @@ public class GUI extends JPanel {
         this.graphalgo=alg;
         this.alg=alg.getGraph();
         Menu();
+        createAddEdgeButton();
         createAddButton();
+        createRemoveEdgeButton();
         createRemoveButton();
+
+
     }
 
     /**
@@ -111,6 +117,7 @@ public class GUI extends JPanel {
         this.add(spinner);
     }
 
+
     /**
      * Creation of the remove node Button.
      */
@@ -155,7 +162,7 @@ public class GUI extends JPanel {
             String x=JOptionPane.showInputDialog("Enter x value for the node: \n The recommended values are between:"+min_x+"-"+max_x);
             String y=JOptionPane.showInputDialog("Enter y value for the node: \n The recommended values are between:"+min_y+"-"+max_y);
             if(x.isEmpty() || y.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Try again failed to create node with the values", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Try again failed to create node with null values", "Error", JOptionPane.ERROR_MESSAGE);
             }
             else {
                 double add_x = Double.parseDouble(x);
@@ -168,6 +175,66 @@ public class GUI extends JPanel {
             }
         });
     }
+
+    /**
+     * Creation of the add Edge button that create the Edge according to the values selected by the user.
+     */
+    private void createAddEdgeButton(){
+        addedgeButton.setLocation(0,100);
+        addedgeButton.setSize(100,50);
+        addedgeButton.setText("Add Edge");
+        this.add(addedgeButton);
+        addedgeButton.addActionListener(e -> {
+            String sour=JOptionPane.showInputDialog("Enter Source Node number for the edge:");
+            String dest=JOptionPane.showInputDialog("Enter Destination Node number for the edge:");
+            String weight=JOptionPane.showInputDialog("Enter Weight Node number for the edge:");
+            if(sour.isEmpty() || dest.isEmpty()||weight.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Try again failed to create Edge with null values", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                int add_sour = Integer.parseInt(sour);
+                int add_dest = Integer.parseInt(dest);
+                int w = Integer.parseInt(weight);
+                if(alg.getNode(add_sour)==null){
+                    JOptionPane.showMessageDialog(this, "Source Node dosent exist please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else if(alg.getNode(add_dest)==null){
+                    JOptionPane.showMessageDialog(this, "Destination Node dosent exist please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    alg.connect(add_sour,add_dest,w);
+                }
+            }
+        });
+    }
+
+    /**
+     * Creation of the remove Edge button that remove the Edge according to the values selected by the user.
+     */
+    private void createRemoveEdgeButton(){
+        removedgeButton.setLocation(0,100);
+        removedgeButton.setSize(100,50);
+        removedgeButton.setText("Remove Edge");
+        this.add(removedgeButton);
+        removedgeButton.addActionListener(e -> {
+            String sour=JOptionPane.showInputDialog("Enter Source Node number for the edge:");
+            String dest=JOptionPane.showInputDialog("Enter Destination Node number for the edge:");
+            if(sour.isEmpty() || dest.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Try again failed to remove Edge with null values", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                int rem_sour = Integer.parseInt(sour);
+                int rem_dest = Integer.parseInt(dest);
+                if(alg.getEdge(rem_sour,rem_dest)==null){
+                    JOptionPane.showMessageDialog(this, "The edge you enter dont exist.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    alg.removeEdge(rem_sour,rem_dest);
+                }
+            }
+        });
+    }
+
 
     /**
      * Create the JMenuBar with 2 JMenu items: File and Functions
