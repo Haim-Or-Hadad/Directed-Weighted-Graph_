@@ -46,11 +46,11 @@ public class Ex2 {
 
 
     public static void main(String[] args) {
-
-        long startTime = System.currentTimeMillis();
-        runGUI(args[0]);
-        long endTime   = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        System.out.println(totalTime/1000F);
+            //long startTime = System.currentTimeMillis();
+            runGUI(args[0]);
+            //long endTime = System.currentTimeMillis();
+            //long totalTime = endTime - startTime;
+            //System.out.println(totalTime / 1000F);
+        }
     }
-}
+
