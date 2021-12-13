@@ -18,7 +18,7 @@ In this UML we are planning how the project will look like.
 
 
 
-## api(packeage)
+## api(package)
 ### JsonToGraph
 JsonToGraph  deserialize the graph json file and create a new graph (constructor) , using gson library functions.
 This function run complexity time O(e)/O(n). |E|=e(edges) , |V|=n(nodes) , the json file include edges and nodes and the function <br/>
